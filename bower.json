@@ -1,0 +1,18 @@
+{
+  "name": "music-server",
+  "version": "0.0.0",
+  "authors": [
+    "Erik Griffin"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.15"
+  }
+}
