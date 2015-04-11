@@ -20,14 +20,16 @@
           console.log('Unique email!');
         }
         else {
-          console.log('Email exists');
+          console.log('Email exists. Breaking.');
+          self.serverMessage = "This email is already in use.";
+          return;
         }
-
 
       }).error(function(data,status) {
         console.log("error: "+status);
-        console.log(JSON.stringify(data));
       });
+
+      console.log('1. validating password...');
 
       validatePassword(self.password, self.confirmation);
 
@@ -37,6 +39,9 @@
 
 
     var validatePassword = function(password, confirmation) {
+
+      console.log('Validating Password');
+
       if (password != confirmation) {
         self.password = "";
         self.confirmation = "";

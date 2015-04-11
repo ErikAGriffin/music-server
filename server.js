@@ -60,11 +60,6 @@
   app.post('/createuser', function(req,res) {
     var sess = req.session;
 
-    console.log("------ session --------");
-    console.log(JSON.stringify(sess));
-    console.log(JSON.stringify(req.body));
-    console.log(JSON.stringify(req.params));
-
     bcrypt.createUser(req.body.email, req.body.password, function(user) {
       db.users.insert(user, function(err,docs) {
         if (err) {return console.error(err);}
