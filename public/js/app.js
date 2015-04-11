@@ -7,6 +7,35 @@
     var self = this;
     var user = {};
 
+    self.serverMessage = "";
+
+    self.signUp = function() {
+
+
+      $http.post('/checkunique/'+self.email).success(function(data,status) {
+        console.log('Success: '+status);
+        console.log(JSON.stringify(data));
+
+        if (data.unique) {
+          console.log('Unique email!');
+        }
+        else {
+          console.log('Email exists');
+        }
+
+
+      }).error(function(data,status) {
+        console.log("error: "+status);
+        console.log(JSON.stringify(data));
+      });
+
+      validatePassword(self.password, self.confirmation);
+
+
+    };
+
+
+
     var validatePassword = function(password, confirmation) {
       if (password != confirmation) {
         self.password = "";
@@ -35,26 +64,6 @@
             console.log('Error: '+status);
         });
       }
-    };
-
-    // Start
-
-    self.serverMessage = "";
-
-    self.signUp = function() {
-
-
-      $http.post('/checkunique/'+self.email).success(function(data,status) {
-        console.log('Success: '+status);
-        console.log(JSON.stringify(data));
-      }).error(function(data,status) {
-        console.log("error: "+status);
-        console.log(JSON.stringify(data));
-      });
-
-      validatePassword(self.password, self.confirmation);
-
-
     };
 
 

@@ -78,14 +78,18 @@
   });
 
   app.post('/checkunique/:email', function(req,res) {
-     console.log("!!!!!!!!!!!");
 
-      db.users.findOne({email:req.params.email});
-//     console.log(JSON.stringify(my_cursor));
-//     console.log("Queried "+req.params.email);
-
-
-
+    db.users.findOne({email: req.params.email}, function(err,doc) {
+      if (err) {console.log(err);}
+      else if (doc) {
+        console.log('Email exists.');
+        res.json({unique: false});
+      }
+      else {
+        res.json({unique: true});
+      }
+    });
+    console.log("Queried "+req.params.email);
   });
 
 
