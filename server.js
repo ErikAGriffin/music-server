@@ -77,7 +77,6 @@
     db.users.findOne({email: req.params.email}, function(err,doc) {
       if (err) {console.log(err);}
       else if (doc) {
-        console.log('Email exists.');
         res.json({unique: false});
       }
       else {
