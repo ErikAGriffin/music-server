@@ -2,6 +2,15 @@
 
   var app = angular.module('musicServer', []);
 
+  app.filter('showKeys', function(){
+    return function(input){
+      if(!angular.isObject(input)){
+        throw Error("Usage of non-object with showKeys filter!");
+      }
+      return Object.keys(input);
+    };
+  });
+
   app.controller('LogInController', ['$http', function($http) {
 
     var self = this;
@@ -56,7 +65,6 @@
         });
       }
     };
-
 
   }]); // End LogInController
 
