@@ -9,6 +9,10 @@
 
     self.serverMessage = "";
 
+
+    self.aTest = function() {};
+
+
     self.signUp = function() {
 
 
