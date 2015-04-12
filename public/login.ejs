@@ -20,9 +20,11 @@
 
 
           <section ng-controller="LogInController as loginCtrl">
-            <form name="signUpForm" class="chirpy-form" ng-submit="signUpForm.$valid && loginCtrl.signUp()" novalidate>
 
-              <p>{{loginCtrl.serverMessage}}</p>
+            <p>{{loginCtrl.serverMessage}}</p>
+
+            <form name="signUpForm" ng-submit="signUpForm.$valid && loginCtrl.signUp()" novalidate>
+
 
               <fieldset>
                 Email:
@@ -37,13 +39,20 @@
                 <input type="submit" value="Sign Up" />
               </fieldset>
             </form>
+
+            <form name="logInForm" ng-submit="logInForm.$valid" novalidate>
+
+              <fieldset>
+                Email:
+                <input type="email" ng-model="loginCtrl.email" name="email" required />
+                Password:
+                <input type="password" ng-model="loginCtrl.password" name="password" required />
+
+                <input type="submit" value="Sign Up" />
+
+              </fieldset>
+            </form>
           </section>
-
-
-
-        </div>
-
-      </div>
 
 
     </main>
