@@ -47,6 +47,11 @@
     res.render('home');
   });
 
+  app.get('/server', function(req, res) {
+    var sess = req.session;
+    res.render('serve');
+  });
+
 
   // --- User Management ---
 

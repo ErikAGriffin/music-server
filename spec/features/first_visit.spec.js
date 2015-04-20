@@ -9,10 +9,6 @@ describe('Arriving at Landing Page', function() {
     expect(browser.getTitle()).toEqual('Music Server');
   });
 
-  xit("Prepares the user for Music Server experience", function() {
-
-  });
-
 
 
 

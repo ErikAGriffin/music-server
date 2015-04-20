@@ -8,7 +8,7 @@ describe('Starting a Server', function() {
   it('A server can be started', function() {
     var serverLink = element(by.linkText('serve.musicserver.com'));
     serverLink.click();
-    expect(element(by.id('')).getText()).toEqual('FE19B');
+    expect(element(by.id('welcome')).getText()).toEqual('Listening on the Universal Server.');
 
   });
 
