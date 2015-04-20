@@ -8,7 +8,6 @@
 
   var app = angular.module('musicServer', []);
 
-
   app.controller('ClientController', ['$scope','$http',function($scope,$http) {
 
     var self = this;
@@ -25,15 +24,27 @@
     };
 
     self.addSong = function(song) {
-
       console.log('Song added.');
-      console.log(song);
+      console.log(song.title);
+      socket.emit('add song', song.title);
+      return false;
     };
 
+  }]); // end ClientController
 
+  app.controller('ServerController', ['$scope','$http',function($scope,$http) {
 
+    var self = this;
 
+    self.songList = [];
 
+    socket.on('add song', function(songTitle) {
+
+      console.log('Hey! '+songTitle);
+      self.songList.push(songTitle);
+     $scope.$apply();
+
+    });
 
   }]);
 

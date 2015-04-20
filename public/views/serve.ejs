@@ -1,11 +1,21 @@
 <% include partials/head %>
 
 
-  <body>
+  <body ng-controller="ServerController as serverCtrl">
 
     <p id="welcome">
       Listening on the Universal Server.
     </p>
+    <p>
+      Up Next:
+    </p>
+    <ul>
+
+      <li ng-repeat="song in serverCtrl.songList">
+        {{song}}
+      </li>
+
+    </ul>
 
 
 

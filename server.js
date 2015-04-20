@@ -15,6 +15,11 @@
 
     console.log('A user has connected');
 
+    socket.on('add song', function(songTitle) {
+      console.log(songTitle);
+      io.emit('add song', songTitle);
+    });
+
 
     socket.on('disconnect', function() {
       console.log('A user has disconnected');
