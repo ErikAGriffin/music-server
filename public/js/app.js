@@ -4,10 +4,12 @@
     client_id: '781c72e52738eb5df96d29271eec310f'
   });
 
-  var app = angular.module('musicServer', ['ngSanitize']);
+  var socket = io();
+
+  var app = angular.module('musicServer', []);
 
 
-  app.controller('ClientController', ['$http','$sce',function($http,$sce) {
+  app.controller('ClientController', ['$http',function($http) {
 
     var self = this;
 
