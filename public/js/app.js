@@ -11,35 +11,17 @@
 
     var self = this;
 
-    self.embed = "";
-
     self.searchText = "";
 
     self.test = function() {
-    };
-
-    self.renderSoundcloud = function(soundHtml) {
-
-      self.embed = $sce.trustAsHtml(soundHtml);
-
+      console.log('Model updated!');
     };
 
     self.musicSearch = function() {
 
       SC.get('/tracks',{q: self.searchText}, function(tracks) {
 
-      SC.oEmbed(tracks.shift().permalink_url, {auto_play: true}, function(oembed){
-
-        console.log(oembed.html);
-
-        self.renderSoundcloud(oembed.html);
-
-      });
-
-
-
-
-
+        self.searchResults = tracks;
 
       });
 

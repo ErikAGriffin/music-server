@@ -16,7 +16,14 @@
 
     </form>
 
-    <article ng-bind-html="clientCtrl.embed"></article>
+    <ul>
+      <li ng-repeat="song in clientCtrl.searchResults">
+
+        <img ng-src={{song.artwork_url}} />
+        {{song.title}}
+
+      </li>
+    </ul>
 
 
   </body>
