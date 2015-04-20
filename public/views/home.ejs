@@ -1,9 +1,21 @@
 <% include partials/head %>
-  <body>
+  <body ng-controller="ClientController as clientCtrl">
 
     <header>
     Visit <a href="/server" >serve.musicserver.com</a> to start a server.
     </header>
+
+    <br>
+
+    <form name="songSeachForm" ng-submit="clientCtrl.musicSearch()" novalidate>
+
+      <input type="text" ng-model="clientCtrl.searchText" ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }" ng-change="clientCtrl.test()" placeholder="Seach Soundcloud..." />
+
+      <input type="submit" value="Search" />
+
+
+    </form>
+
 
 
   </body>

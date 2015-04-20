@@ -9,6 +9,12 @@ describe('Arriving at Landing Page', function() {
     expect(browser.getTitle()).toEqual('Music Server');
   });
 
+  it("Can search Soundcloud songs", function() {
+
+
+
+  });
+
 
 
 

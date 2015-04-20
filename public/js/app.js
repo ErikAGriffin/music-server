@@ -2,6 +2,77 @@
 
   var app = angular.module('musicServer', []);
 
+
+
+  app.controller('ClientController', ['$http',function($http) {
+
+    var self = this;
+
+    self.searchText = "";
+
+    self.test = function() {
+    };
+
+    self.musicSearch = function() {
+
+
+    };
+
+
+
+
+  }]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   app.filter('showKeys', function(){
     return function(input){
       if(!angular.isObject(input)){
