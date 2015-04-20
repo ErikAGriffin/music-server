@@ -21,7 +21,7 @@
 
   // -- EJS Templates --
   app.set('view engine','ejs');
-  app.set('views', root);
+  app.set('views', root+'views/');
 
   // -- Database --
 
@@ -44,9 +44,7 @@
 
   app.get('/', function(req, res) {
     var sess = req.session;
-    console.log('--- '+sess.user);
-    if (sess.user) {res.sendFile(root+'home.html');}
-    else {res.redirect('/login');}
+    res.render('home');
   });
 
 
