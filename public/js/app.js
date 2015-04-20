@@ -1,19 +1,45 @@
 (function() {
 
-  var app = angular.module('musicServer', []);
+  SC.initialize({
+    client_id: '781c72e52738eb5df96d29271eec310f'
+  });
+
+  var app = angular.module('musicServer', ['ngSanitize']);
 
 
-
-  app.controller('ClientController', ['$http',function($http) {
+  app.controller('ClientController', ['$http','$sce',function($http,$sce) {
 
     var self = this;
+
+    self.embed = "";
 
     self.searchText = "";
 
     self.test = function() {
     };
 
+    self.renderSoundcloud = function(soundHtml) {
+
+      self.embed = $sce.trustAsHtml(soundHtml);
+
+    };
+
     self.musicSearch = function() {
+
+      SC.get('/tracks',{q: self.searchText}, function(tracks) {
+
+      SC.oEmbed(tracks.shift().permalink_url, {auto_play: true}, function(oembed){
+
+        console.log(oembed.html);
+
+        self.renderSoundcloud(oembed.html);
+
+      });
+
+
+
+
+      });
 
 
     };
