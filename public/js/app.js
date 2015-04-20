@@ -9,26 +9,22 @@
   var app = angular.module('musicServer', []);
 
 
-  app.controller('ClientController', ['$http',function($http) {
+  app.controller('ClientController', ['$scope','$http',function($scope,$http) {
 
     var self = this;
 
     self.searchText = "";
 
-    self.test = function() {
-      console.log('Model updated!');
-    };
-
     self.musicSearch = function() {
-
+      console.log('Calling SC.get');
       SC.get('/tracks',{q: self.searchText}, function(tracks) {
-
+        console.log('SC.get returned');
         self.searchResults = tracks;
-
+        $scope.$apply();
       });
-
-
     };
+
+
 
 
 

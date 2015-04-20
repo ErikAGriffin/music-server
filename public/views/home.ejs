@@ -9,7 +9,7 @@
 
     <form name="songSeachForm" ng-submit="clientCtrl.musicSearch()" novalidate>
 
-      <input type="text" ng-model="clientCtrl.searchText" ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }" ng-change="clientCtrl.test()" placeholder="Seach Soundcloud..." />
+      <input type="text" ng-model="clientCtrl.searchText" placeholder="Seach Soundcloud..." />
 
       <input type="submit" value="Search" />
 
@@ -20,7 +20,9 @@
       <li ng-repeat="song in clientCtrl.searchResults">
 
         <img ng-src={{song.artwork_url}} />
-        {{song.title}}
+        <span class="song-title">{{song.title}}</span>
+
+        <a ng-click="">Add Song</a>
 
       </li>
     </ul>
