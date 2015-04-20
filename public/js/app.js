@@ -42,11 +42,19 @@
 
       console.log('Hey! '+songTitle);
       self.songList.push(songTitle);
-     $scope.$apply();
+      $scope.$apply();
 
     });
 
-  }]);
+    $http.post('/addtrack').success(function(data,status) {
+
+      console.log('Success!');
+      console.log(data.contents);
+
+      }).error(function(data,status) {
+        console.log("error in addtrack post: "+status);
+      });
+    }]);
 
 
 

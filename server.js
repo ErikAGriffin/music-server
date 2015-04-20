@@ -8,6 +8,10 @@
 
   app.use(express.static(root));
 
+  // -- FileSystem --
+
+  var fs = require('fs');
+
   // -- Socket.io --
   var io = require('socket.io')(server);
 
@@ -71,6 +75,25 @@
   app.get('/server', function(req, res) {
     var sess = req.session;
     res.render('serve');
+  });
+
+  // --- Track Management ---
+
+  app.post('/addtrack', function(req, res) {
+
+    fs.writeFile('./test_file',"Test Data", function(err) {
+      if(err){return console.log(err);}
+      console.log('File was saved!');
+    });
+    var file = {};
+
+    fs.readFile('./test_file','utf-8', function(err, data) {
+      if (err) {
+        console.log('error!');
+      }
+      file.contents = data;
+      res.json(file);
+    });
   });
 
 
