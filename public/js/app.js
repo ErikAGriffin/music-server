@@ -24,6 +24,12 @@
       });
     };
 
+    self.addSong = function(song) {
+
+      console.log('Song added.');
+      console.log(song);
+    };
+
 
 
 
