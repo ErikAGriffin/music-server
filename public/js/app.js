@@ -69,6 +69,8 @@
 
       socket.on('add song to '+self.hostName, function(newSong) {
         SC.stream("/tracks/"+newSong.id, function(sound) {
+          console.log('_______________');
+          console.log(JSON.stringify(sound));
           sound.play();
         });
         self.songList.push(newSong.title);
