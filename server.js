@@ -21,12 +21,12 @@
 
     socket.on('add song', function(newSong) {
        var hostName = newSong.hostName;
-       fs.readFile('./'+hostName+'.json','utf-8',function(err,data) {
+       fs.readFile('./files/'+hostName+'.json','utf-8',function(err,data) {
          if(err) {console.log('error reading file '+hostName+'while adding song');
            data = "[]";}
          var tracklist = JSON.parse(data);
          tracklist.push(newSong.song);
-         fs.writeFile('./'+hostName+'.json',JSON.stringify(tracklist), function(err) {
+         fs.writeFile('./files/'+hostName+'.json',JSON.stringify(tracklist), function(err) {
            if(err){console.log('error adding new track to file:\n'+err);}
          });
        });
@@ -94,12 +94,12 @@
 
     var obj = {};
     obj.hostName = sess.hostName;
-    fs.readFile('./'+sess.hostName+'.json','utf-8', function(err, data) {
+    fs.readFile('./files/'+sess.hostName+'.json','utf-8', function(err, data) {
       if (err) {
         console.log('unable to read tracklist file '+sess.hostName);
         console.log(err);
         data = "[]";
-        fs.writeFile('./'+sess.hostName+'.json',"[]",function(err) {
+        fs.writeFile('./files/'+sess.hostName+'.json',"[]",function(err) {
           if (err){console.log('error creating file:\n'+err);}
           console.log('created new file');
         });
