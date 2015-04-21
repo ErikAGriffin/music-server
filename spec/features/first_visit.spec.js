@@ -1,4 +1,4 @@
-describe('Arriving at Landing Page', function() {
+describe('First Visit', function() {
 
   var searchAndWait = function() {
     var searchBox = element(by.model('clientCtrl.searchText'));
