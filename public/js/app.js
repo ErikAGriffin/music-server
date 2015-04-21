@@ -49,7 +49,8 @@
     $http.post('/addtrack').success(function(data,status) {
 
       console.log('Success!');
-      console.log(data.contents);
+      console.log(data);
+      console.log(data[0].test);
 
       }).error(function(data,status) {
         console.log("error in addtrack post: "+status);

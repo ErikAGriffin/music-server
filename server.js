@@ -32,8 +32,6 @@
   });
 
 
-
-
   // -- Express Session --
 
   var session = require('express-session');
@@ -81,17 +79,17 @@
 
   app.post('/addtrack', function(req, res) {
 
-    fs.writeFile('./test_file',"Test Data", function(err) {
-      if(err){return console.log(err);}
+    fs.writeFile('./test_file.json',"[{\"test\": \"data\"}]", function(err) {
+      if(err){return console.log("ERROR! :"+err);}
       console.log('File was saved!');
     });
     var file = {};
 
-    fs.readFile('./test_file','utf-8', function(err, data) {
+    fs.readFile('./test_file.json','utf-8', function(err, data) {
       if (err) {
         console.log('error!');
       }
-      file.contents = data;
+      file = JSON.parse(data);
       res.json(file);
     });
   });
