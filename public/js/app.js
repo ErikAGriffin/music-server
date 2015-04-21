@@ -19,8 +19,21 @@
 
     self.connect = function() {
 
-      console.log("Connected to "+self.hostName);
-      self.isConnected = true;
+      $http.post('/checkhost/'+self.hostName).success(function(data, status) {
+        console.log(data);
+        if (data) {
+          console.log("Connected to "+self.hostName);
+          self.connectMessage = "";
+          self.isConnected = true;
+        }
+        else {
+          self.hostName = "";
+          self.connectMessage = "There is no server by that name!";
+        }
+      }).error(function(data, status) {
+        console.log('error checking hostname: '+status);
+      });
+
 
     };
 
