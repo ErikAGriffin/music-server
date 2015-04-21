@@ -19,12 +19,13 @@
     console.log('A user has connected');
 
     socket.on('add song', function(newSong) {
+      console.log(newSong);
       var hostName = newSong.hostName;
       fs.readFile('./files/'+hostName+'.json','utf-8',function(err,data) {
         if(err) {console.log('error reading file '+hostName+'while adding song');
           data = "[]";}
         var tracklist = JSON.parse(data);
-        tracklist.push(newSong.song);
+        tracklist.push(newSong.song.title);
         fs.writeFile('./files/'+hostName+'.json',JSON.stringify(tracklist), function(err) {
           if(err){console.log('error adding new track to file:\n'+err);}
         });
