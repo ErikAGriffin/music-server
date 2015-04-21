@@ -72,25 +72,29 @@
 
   app.get('/server', function(req, res) {
     var sess = req.session;
-    res.render('serve');
+    if (!sess.serverID) {
+      sess.serverID = genuuid.genServerID();
+    }
+    res.render('serve', {serverID: sess.serverID});
   });
 
   // --- Track Management ---
 
   app.post('/addtrack', function(req, res) {
 
-    fs.writeFile('./test_file.json',"[{\"test\": \"data\"}]", function(err) {
-      if(err){return console.log("ERROR! :"+err);}
+    var file = [{"test":"new data"}];
+
+    fs.writeFile('./test_file.json', JSON.stringify(file), function(err) {
+      if(err){return console.log("error saving file! :"+err);}
       console.log('File was saved!');
     });
-    var file = {};
 
     fs.readFile('./test_file.json','utf-8', function(err, data) {
       if (err) {
-        console.log('error!');
+        console.log('error retrieving file!');
+        data = {};
       }
-      file = JSON.parse(data);
-      res.json(file);
+      res.json(JSON.parse(data));
     });
   });
 
