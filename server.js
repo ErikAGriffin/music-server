@@ -19,26 +19,15 @@
 
     console.log('A user has connected');
 
-
-     socket.on('add song', function(newSong) {
-
-       console.log('Adding Song');
-
-       console.log(JSON.stringify(newSong));
-
-       var hostID = newSong.hostID;
-
-       fs.readFile('./'+hostID+'.json','utf-8',function(err,data) {
-         if(err) {
-           console.log('error reading file '+hostID+'while adding song');
-           data = "[]";
-         }
+    socket.on('add song', function(newSong) {
+       var hostName = newSong.hostName;
+       fs.readFile('./'+hostName+'.json','utf-8',function(err,data) {
+         if(err) {console.log('error reading file '+hostName+'while adding song');
+           data = "[]";}
          var tracklist = JSON.parse(data);
          tracklist.push(newSong.song);
-         console.log(tracklist);
-         fs.writeFile('./'+hostID+'.json',JSON.stringify(tracklist), function(err) {
+         fs.writeFile('./'+hostName+'.json',JSON.stringify(tracklist), function(err) {
            if(err){console.log('error adding new track to file:\n'+err);}
-           console.log('Track added.');
          });
        });
        io.emit('add song', newSong.song);
@@ -49,24 +38,6 @@
       console.log('A user has disconnected');
     });
 
-  });
-
-  app.post('/addtrack', function(req, res) {
-
-    var file = [{"test":"new data"}];
-
-    fs.writeFile('./test_file.json', JSON.stringify(file), function(err) {
-      if(err){return console.log("error saving file! :"+err);}
-      console.log('File was saved!');
-    });
-
-    fs.readFile('./test_file.json','utf-8', function(err, data) {
-      if (err) {
-        console.log('error retrieving file!');
-        data = {};
-      }
-      res.json(JSON.parse(data));
-    });
   });
 
 
@@ -110,10 +81,10 @@
 
   app.get('/server', function(req, res) {
     var sess = req.session;
-    if (!sess.serverID) {
-      sess.serverID = genuuid.genServerID();
+    if (!sess.hostName) {
+      sess.hostName = genuuid.genServerID();
     }
-    res.render('host', {serverID: sess.serverID});
+    res.render('host', {hostName: sess.hostName});
   });
 
   // --- Track Management ---
@@ -122,13 +93,13 @@
     var sess = req.session;
 
     var obj = {};
-    obj.serverID = sess.serverID;
-    fs.readFile('./'+sess.serverID+'.json','utf-8', function(err, data) {
+    obj.hostName = sess.hostName;
+    fs.readFile('./'+sess.hostName+'.json','utf-8', function(err, data) {
       if (err) {
-        console.log('unable to read tracklist file '+sess.serverID);
+        console.log('unable to read tracklist file '+sess.hostName);
         console.log(err);
         data = "[]";
-        fs.writeFile('./'+sess.serverID+'.json',"[]",function(err) {
+        fs.writeFile('./'+sess.hostName+'.json',"[]",function(err) {
           if (err){console.log('error creating file:\n'+err);}
           console.log('created new file');
         });

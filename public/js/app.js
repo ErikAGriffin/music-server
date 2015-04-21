@@ -41,7 +41,7 @@
     self.addSong = function(song) {
       console.log('Song added.');
       console.log(song.title);
-      socket.emit('add song', {hostID: self.hostName,song: song.title});
+      socket.emit('add song', {hostName: self.hostName,song: song.title});
       return false;
     };
 
@@ -53,7 +53,7 @@
 
     $http.post('/gettracklist').success(function(data, status) {
 
-      self.hostName = data.serverID;
+      self.hostName = data.hostName;
 
       self.songList = data.tracklist;
 
