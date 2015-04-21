@@ -18,7 +18,6 @@
     self.isConnected = false;
 
     self.connect = function() {
-
       $http.post('/checkhost/'+self.hostName).success(function(data, status) {
         console.log(data);
         if (data) {
@@ -33,8 +32,6 @@
       }).error(function(data, status) {
         console.log('error checking hostname: '+status);
       });
-
-
     };
 
 
@@ -52,8 +49,7 @@
     };
 
     self.addSong = function(song) {
-      console.log('Song added.');
-      console.log(song.title);
+      console.log(song);
       socket.emit('add song', {hostName: self.hostName,song: song.title});
       return false;
     };
@@ -65,24 +61,19 @@
     var self = this;
 
     $http.post('/gettracklist').success(function(data, status) {
-
       self.hostName = data.hostName;
-
       self.songList = data.tracklist;
 
+      socket.on('add song to '+self.hostName, function(songTitle) {
+        self.songList.push(songTitle);
+        $scope.$apply();
+      });
     }).error(function(data,status) {
       console.log('error getting tracklist');
     });
 
 
 
-    socket.on('add song', function(songTitle) {
-
-      console.log('Hey! '+songTitle);
-      self.songList.push(songTitle);
-      $scope.$apply();
-
-    });
 
 
 
