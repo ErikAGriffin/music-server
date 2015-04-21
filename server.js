@@ -80,6 +80,23 @@
 
   // --- Track Management ---
 
+  app.post('/gettracklist', function(req, res) {
+    var sess = req.session;
+
+    var obj = {};
+    obj.serverID = sess.serverID;
+    fs.readFile('./'+sess.serverID+'.json','utf-8', function(err, data) {
+      if (err) {
+        console.log('error reading tracklist file '+sess.serverID);
+        console.log(err);
+        data = [{}];
+      }
+      obj.tracklist = JSON.parse(data);
+      res.json(obj);
+    });
+
+  });
+
   app.post('/addtrack', function(req, res) {
 
     var file = [{"test":"new data"}];

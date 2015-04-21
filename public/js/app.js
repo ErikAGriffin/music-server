@@ -30,11 +30,34 @@
       return false;
     };
 
+//     $http.post('/addtrack').success(function(data,status) {
+
+//       console.log('Success!');
+//       console.log(data);
+//       console.log(data[0].test);
+
+//       }).error(function(data,status) {
+//         console.log("error in addtrack post: "+status);
+//       });
+
+
+
   }]); // end ClientController
 
   app.controller('ServerController', ['$scope','$http',function($scope,$http) {
 
     var self = this;
+
+    $http.post('/gettracklist').success(function(data, status) {
+
+      console.log('HAilo');
+      console.log(data);
+      console.log(JSON.stringify(data));
+
+
+    }).error(function(data,status) {
+      console.log('error getting tracklist');
+    });
 
     self.songList = [];
 
@@ -46,21 +69,9 @@
 
     });
 
-    $http.post('/addtrack').success(function(data,status) {
-
-      console.log('Success!');
-      console.log(data);
-      console.log(data[0].test);
-
-      }).error(function(data,status) {
-        console.log("error in addtrack post: "+status);
-      });
-    }]);
 
 
-
-
-
+  }]); // end ServerController
 
 
 

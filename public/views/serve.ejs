@@ -1,11 +1,17 @@
 <% include partials/head %>
 
 
-  <body ng-controller="ServerController as serverCtrl">
-
+  <header>
     <p id="welcome">
       Listening on the Universal Server.
     </p>
+    <p id="serverID">
+      <%= serverID %>
+    </p>
+  </header>
+
+
+  <body ng-controller="ServerController as serverCtrl">
     <p>
       Up Next:
     </p>
