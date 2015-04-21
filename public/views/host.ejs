@@ -17,7 +17,7 @@
     </p>
     <ul>
 
-      <li ng-repeat="song in serverCtrl.songList">
+      <li ng-repeat="song in serverCtrl.songList track by $index">
         {{song}}
       </li>
 

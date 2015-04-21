@@ -12,6 +12,21 @@
 
     var self = this;
 
+    // Host Connect
+
+    self.hostName = "";
+    self.isConnected = false;
+
+    self.connect = function() {
+
+      console.log("Connected to "+self.hostName);
+      self.isConnected = true;
+
+    };
+
+
+    // Search and Add Songs
+
     self.searchText = "";
 
     self.musicSearch = function() {
@@ -26,21 +41,9 @@
     self.addSong = function(song) {
       console.log('Song added.');
       console.log(song.title);
-      socket.emit('add song', song.title);
+      socket.emit('add song', {hostID: self.hostName,song: song.title});
       return false;
     };
-
-//     $http.post('/addtrack').success(function(data,status) {
-
-//       console.log('Success!');
-//       console.log(data);
-//       console.log(data[0].test);
-
-//       }).error(function(data,status) {
-//         console.log("error in addtrack post: "+status);
-//       });
-
-
 
   }]); // end ClientController
 
@@ -50,16 +53,15 @@
 
     $http.post('/gettracklist').success(function(data, status) {
 
-      console.log('HAilo');
-      console.log(data);
-      console.log(JSON.stringify(data));
+      self.hostName = data.serverID;
 
+      self.songList = data.tracklist;
 
     }).error(function(data,status) {
       console.log('error getting tracklist');
     });
 
-    self.songList = [];
+
 
     socket.on('add song', function(songTitle) {
 
