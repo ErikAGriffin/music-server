@@ -1,0 +1,58 @@
+body {
+  text-align:center;
+}
+
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size:4em;
+  margin: 0px 12px;
+  margin-top: 30px;
+}
+
+.minititle {
+  font-size:2em;
+}
+
+p {
+  font-size: 1.5em;
+  margin: 12px 20px;
+}
+
+a[ng-click]{
+  cursor: pointer;
+}
+
+form {
+  width: 100%;
+}
+
+.serverMessage {
+  text-align:center;
+  margin: 0 auto;
+  display:block;
+}
+
+#hostform {
+  text-align:center;
+  font-size:4em;
+  width: 80%;
+  margin:0 auto;
+  display:block;
+  border: 0px;
+  border-bottom: 4px solid black;
+  margin-bottom: 24px;
+}
+
+#soundsearch {
+
+  font-size:1em;
+
+
+}
+
+input[type=submit] {
+
+
+
+
+}

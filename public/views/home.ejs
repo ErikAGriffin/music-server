@@ -1,27 +1,30 @@
 <% include partials/head %>
 
-
-  <header>
-    Start by connecting to a server.
-  </header>
-
   <body ng-controller="ClientController as clientCtrl">
 
-    <br>
+    <header>
+      <h1 ng-class="{minititle:clientCtrl.isConnected}">
+        Music Server
+      </h1>
+    </header>
+
 
     <section id="startbox" ng-hide="clientCtrl.isConnected">
 
-      <span>{{clientCtrl.connectMessage}}</span>
+      <p>
+        Connect to a server:
+      </p>
 
-      <form name="hostConnect" ng-submit="hostConnect.$valid && clientCtrl.connect()" novalidate>
+      <form name="hostConnect" ng-submit="hostConnect.$valid && clientCtrl.connect()" autocomplete="off" novalidate>
+        <span class="serverMessage">{{clientCtrl.connectMessage}}&nbsp;</span>
 
-        <input type="text" ng-model="clientCtrl.hostName" required />
+        <input id="hostform" type="text" ng-model="clientCtrl.hostName" placeholder="#####" autocomplete="off" required />
 
         <input type="submit" value="Connect" />
 
       </form>
 
-      <span>.. or <a href="/server">host a server</a>.</span>
+      <p>...or <a href="/server">host</a> your own.</p>
     </section>
 
 
@@ -31,7 +34,7 @@
 
     <form ng-show="clientCtrl.isConnected" name="songSeachForm" ng-submit="clientCtrl.musicSearch()" novalidate>
 
-      <input type="text" ng-model="clientCtrl.searchText" placeholder="Seach Soundcloud..." />
+      <input id="soundsearch" type="text" ng-model="clientCtrl.searchText" placeholder="Seach Soundcloud..." />
 
       <input type="submit" value="Search" />
 
