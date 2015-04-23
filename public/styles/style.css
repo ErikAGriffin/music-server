@@ -14,9 +14,15 @@ h1 {
 }
 
 p {
+  font-family: 'EB Garamond', serif;
   font-size: 1.5em;
   margin: 12px 20px;
 }
+
+a {
+  color:black;
+}
+
 
 a[ng-click]{
   cursor: pointer;
@@ -44,15 +50,50 @@ form {
 }
 
 #soundsearch {
-
   font-size:1em;
-
-
 }
 
-input[type=submit] {
-
-
-
-
+input[type=image] {
+  width:40%;
 }
+
+footer {
+  position:fixed;
+  bottom:0px;
+  left:0px;
+  width:100%;
+  margin: 12px 0px;
+}
+
+footer a {
+  margin: 0px 12px;
+}
+
+
+/* Host Page */
+
+#hostname {
+  font-size: 3em;
+}
+
+ul {
+  list-style:none;
+  padding:0px;
+}
+
+li {
+  padding: 12px 0px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -18,9 +18,9 @@
       <form name="hostConnect" ng-submit="hostConnect.$valid && clientCtrl.connect()" autocomplete="off" novalidate>
         <span class="serverMessage">{{clientCtrl.connectMessage}}&nbsp;</span>
 
-        <input id="hostform" type="text" ng-model="clientCtrl.hostName" placeholder="#####" autocomplete="off" required />
+        <input id="hostform" type="text" ng-model="clientCtrl.hostName" placeholder="{{clientCtrl.searchPlaceholder}}" autocomplete="off" ng-focus="clientCtrl.togglePlaceholder()" ng-blur="clientCtrl.togglePlaceholder()" required />
 
-        <input type="submit" value="Connect" />
+        <input type="image" value="Submit" src="/images/connect.png" />
 
       </form>
 
@@ -51,6 +51,13 @@
 
       </li>
     </ul>
+
+    <footer>
+      <nav>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+      </nav>
+    </footer>
 
 
   </body>

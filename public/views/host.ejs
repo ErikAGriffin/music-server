@@ -1,28 +1,25 @@
 <% include partials/head %>
 
 
-  <header>
-    <p id="welcome">
-      Listening on the Universal Server.
-    </p>
-    <p id="serverID">
-      <%= hostName %>
-    </p>
-  </header>
-
 
   <body ng-controller="ServerController as serverCtrl">
-    <p>
-      Up Next:
-    </p>
-    <ul>
 
-      <li ng-repeat="song in serverCtrl.songList track by $index">
-        {{song}}
-      </li>
+    <header>
+      <h1 class="minititle">
+        Music Server
+      </h1>
+      <h2 id="hostname"><%= hostName %></h2>
+    </header>
 
-    </ul>
+    <main>
+      <ul>
 
+        <li ng-repeat="song in serverCtrl.songList track by $index">
+          {{song}}
+        </li>
+
+      </ul>
+    </main>
 
 
 

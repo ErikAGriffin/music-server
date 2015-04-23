@@ -16,6 +16,12 @@
 
     self.hostName = "";
     self.isConnected = false;
+    self.searchPlaceholder = "#####";
+
+    self.togglePlaceholder = function() {
+      if (self.searchPlaceholder === "") {self.searchPlaceholder = "#####";}
+      else {self.searchPlaceholder = "";}
+    };
 
     self.connect = function() {
       $http.post('/checkhost/'+self.hostName).success(function(data, status) {
@@ -69,8 +75,6 @@
 
       socket.on('add song to '+self.hostName, function(newSong) {
         SC.stream("/tracks/"+newSong.id, function(sound) {
-          console.log('_______________');
-          console.log(JSON.stringify(sound));
           sound.play();
         });
         self.songList.push(newSong.title);
