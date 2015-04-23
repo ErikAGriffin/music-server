@@ -45,8 +45,8 @@
       <li ng-repeat="song in clientCtrl.searchResults">
 
         <img ng-src={{song.artwork_url}} />
-        <span class="song-title">{{song.title}}</span>
-        <span>{{song.user.username}}</span>
+        <p class="songtitle">{{song.title}}</p>
+        <p class="songartist">{{song.user.username}}</p>
 
         <a ng-click="clientCtrl.addSong(song)"><img src="/images/upload.png" /></a>
 

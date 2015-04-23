@@ -65,16 +65,42 @@ input:not([type=submit]):not([type=image]) {
 }
 
 #searchresults {
-  background-color:yellow;
+  position:relative;
 }
 
 #searchresults li {
+  height: 100px;
   margin: 3px 0px;
+  padding: 0px;
+  text-align:left;
+  position:relative;
+}
+
+#searchresults li > img {
+  position:absolute;
+  left:0px;
+  top:0px;
+}
+
+#searchresults a > img {
+  position:absolute;
+  right:3px;
+  bottom:3px;
+
+}
+
+#searchresults p {
+  margin:0px;
+  margin-left:100px;
   padding: 0px;
 }
 
-#searchresults img {
+#searchresults .songtitle {
+  font-style:bold;
+}
 
+#searchresults .songartist {
+  color:#6B6B6B;
 }
 
 

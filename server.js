@@ -16,7 +16,6 @@
   var io = require('socket.io')(server);
 
   io.on('connection', function(socket) {
-    console.log('A user has connected');
 
     socket.on('add song', function(newSong) {
       console.log(newSong);
@@ -35,7 +34,6 @@
 
 
     socket.on('disconnect', function() {
-      console.log('A user has disconnected');
     });
 
   });
