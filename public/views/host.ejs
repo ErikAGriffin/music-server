@@ -15,7 +15,7 @@
       <ul>
 
         <li ng-repeat="song in serverCtrl.songList track by $index">
-          {{song}}
+          <img ng-src="{{song.artwork_url}}" />{{song.artist}} - {{song.title}}
         </li>
 
       </ul>

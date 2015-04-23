@@ -75,9 +75,13 @@
 
     self.addSong = function(song) {
       console.log(song);
-      var newSong = {};
-      newSong.id = song.id;
-      newSong.title = song.title;
+      var newSong = {
+        id: song.id,
+        title: song.title,
+        artist: song.user.username,
+        artwork_url: song.artwork_url,
+        currently_playing: false
+      };
       socket.emit('add song', {hostName: self.hostName,song: newSong});
       return false;
     };
@@ -88,18 +92,20 @@
 
     var self = this;
 
+    self.songList = [];
+
     $http.post('/gettracklist').success(function(data, status) {
       self.hostName = data.hostName;
       self.songList = data.tracklist;
 
       socket.on('add song to '+self.hostName, function(newSong) {
+        self.songList.push(newSong);
+        $scope.$apply();
         SC.stream("/tracks/"+newSong.id, function(sound) {
           console.log(sound);
-          sound.play();
-          sound.stop();
+          if (self.songList.length === 1) {sound.play();}
         });
-        self.songList.push(newSong.title);
-        $scope.$apply();
+
       });
     }).error(function(data,status) {
       console.log('error getting tracklist');
