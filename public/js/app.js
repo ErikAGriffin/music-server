@@ -52,11 +52,22 @@
 
     self.searchText = "";
 
+    var resolveImagesOf = function(tracks) {
+      // add additional logic for the default avatar
+      for (var i=0;i<tracks.length;i++) {
+        if (!tracks[i].artwork_url) {
+          tracks[i].artwork_url = tracks[i].user.avatar_url;
+        }
+      }
+      return tracks;
+    };
+
     self.musicSearch = function() {
       console.log('Calling SC.get');
       SC.get('/tracks',{q: self.searchText}, function(tracks) {
         console.log('SC.get returned');
         console.log(tracks[0]);
+        tracks = resolveImagesOf(tracks);
         self.searchResults = tracks;
         $scope.$apply();
       });
@@ -83,7 +94,9 @@
 
       socket.on('add song to '+self.hostName, function(newSong) {
         SC.stream("/tracks/"+newSong.id, function(sound) {
+          console.log(sound);
           sound.play();
+          sound.stop();
         });
         self.songList.push(newSong.title);
         $scope.$apply();
@@ -91,6 +104,8 @@
     }).error(function(data,status) {
       console.log('error getting tracklist');
     });
+
+
 
 
   }]); // end ServerController
