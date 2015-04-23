@@ -18,9 +18,9 @@
       <form name="hostConnect" ng-submit="hostConnect.$valid && clientCtrl.connect()" autocomplete="off" novalidate>
         <span class="serverMessage">{{clientCtrl.connectMessage}}&nbsp;</span>
 
-        <input id="hostform" type="text" ng-model="clientCtrl.hostName" placeholder="{{clientCtrl.searchPlaceholder}}" autocomplete="off" ng-focus="clientCtrl.togglePlaceholder()" ng-blur="clientCtrl.togglePlaceholder()" required />
+        <input type="text" ng-model="clientCtrl.hostName" placeholder="{{clientCtrl.hostPlaceholder}}" autocomplete="off" ng-focus="clientCtrl.togglePlaceholder()" ng-blur="clientCtrl.togglePlaceholder()" required />
 
-        <input type="image" value="Submit" src="/images/connect.png" />
+        <input class="connect" type="image" value="Submit" src="/images/connect.png" />
 
       </form>
 
@@ -32,22 +32,24 @@
 
 
 
-    <form ng-show="clientCtrl.isConnected" name="songSeachForm" ng-submit="clientCtrl.musicSearch()" novalidate>
+    <form ng-show="clientCtrl.isConnected" name="songSearchForm" ng-submit="songSearchForm.$valid && clientCtrl.musicSearch()" autocomplete="off" novalidate>
 
-      <input id="soundsearch" type="text" ng-model="clientCtrl.searchText" placeholder="Seach Soundcloud..." />
+      <input id="soundsearch" type="text" ng-model="clientCtrl.searchText" placeholder="{{clientCtrl.searchPlaceholder}}" ng-focus="clientCtrl.togglePlaceholder()" ng-blur="clientCtrl.togglePlaceholder()" required />
 
-      <input type="submit" value="Search" />
+      <input class="soundsearch" type="image" value="Submit" src="/images/search.png" />
 
 
     </form>
 
-    <ul>
+    <ul id="searchresults">
       <li ng-repeat="song in clientCtrl.searchResults">
 
         <img ng-src={{song.artwork_url}} />
         <span class="song-title">{{song.title}}</span>
+        <span>{{song.user.username}}</span>
 
-        <a ng-click="clientCtrl.addSong(song)">Add Song</a>
+        <a ng-click="clientCtrl.addSong(song)"><img src="/images/upload.png" /></a>
+
 
       </li>
     </ul>

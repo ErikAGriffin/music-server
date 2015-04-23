@@ -5,7 +5,7 @@ body {
 h1 {
   font-family: 'Montserrat', sans-serif;
   font-size:4em;
-  margin: 0px 12px;
+  margin: 15px 12px;
   margin-top: 30px;
 }
 
@@ -38,7 +38,7 @@ form {
   display:block;
 }
 
-#hostform {
+input:not([type=submit]):not([type=image]) {
   text-align:center;
   font-size:4em;
   width: 80%;
@@ -50,12 +50,33 @@ form {
 }
 
 #soundsearch {
-  font-size:1em;
+  font-size:1.5em;
 }
 
-input[type=image] {
+.connect {
   width:40%;
 }
+
+.soundsearch {
+  width:12%;
+}
+.soundsearch:hover {
+
+}
+
+#searchresults {
+  background-color:yellow;
+}
+
+#searchresults li {
+  margin: 3px 0px;
+  padding: 0px;
+}
+
+#searchresults img {
+
+}
+
 
 footer {
   position:fixed;

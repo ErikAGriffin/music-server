@@ -16,11 +16,18 @@
 
     self.hostName = "";
     self.isConnected = false;
-    self.searchPlaceholder = "#####";
+    self.searchPlaceholder = "Search Soundcloud...";
+    self.hostPlaceholder = "#####";
 
     self.togglePlaceholder = function() {
-      if (self.searchPlaceholder === "") {self.searchPlaceholder = "#####";}
-      else {self.searchPlaceholder = "";}
+      if (self.searchPlaceholder === "" || self.hostPlaceholder === "") {
+        self.searchPlaceholder = "Search Soundcloud...";
+        self.hostPlaceholder = "#####";
+      }
+      else {
+        self.searchPlaceholder = "";
+        self.hostPlaceholder = "";
+      }
     };
 
     self.connect = function() {
@@ -49,6 +56,7 @@
       console.log('Calling SC.get');
       SC.get('/tracks',{q: self.searchText}, function(tracks) {
         console.log('SC.get returned');
+        console.log(tracks[0]);
         self.searchResults = tracks;
         $scope.$apply();
       });
