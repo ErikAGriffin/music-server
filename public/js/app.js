@@ -28,6 +28,7 @@
         self.searchPlaceholder = "";
         self.hostPlaceholder = "";
       }
+      //window.scrollTo(input element)
     };
 
     self.connect = function() {
@@ -80,7 +81,7 @@
         title: song.title,
         artist: song.user.username,
         artwork_url: song.artwork_url,
-        currently_playing: false
+        played: false
       };
       socket.emit('add song', {hostName: self.hostName,song: newSong});
       return false;
@@ -88,28 +89,50 @@
 
   }]); // end ClientController
 
+  // Begin ServerController
+
   app.controller('ServerController', ['$scope','$http',function($scope,$http) {
 
     var self = this;
 
     self.songList = [];
 
+    soundManager.defaultOptions = {
+      onfinish: function() {
+        for (var i=0;i<self.songList.length;i++) {
+          if (!self.songList[i].played) {
+            self.songList[i].sound.play();
+            break;
+          }
+        }
+      }
+    };
+
+
     $http.post('/gettracklist').success(function(data, status) {
       self.hostName = data.hostName;
       self.songList = data.tracklist;
 
       socket.on('add song to '+self.hostName, function(newSong) {
-        self.songList.push(newSong);
-        $scope.$apply();
         SC.stream("/tracks/"+newSong.id, function(sound) {
+          newSong.sound = sound;
           console.log(sound);
-          if (self.songList.length === 1) {sound.play();}
+          self.songList.push(newSong);
+          $scope.$apply();
+          if (self.songList.length === 1) {
+            self.songList[0].sound.play();
+            self.songList[0].played = true;
+          }
         });
-
       });
     }).error(function(data,status) {
       console.log('error getting tracklist');
     });
+
+
+    self.pauseAll = function() {
+      soundManager.pauseAll();
+    };
 
 
 
