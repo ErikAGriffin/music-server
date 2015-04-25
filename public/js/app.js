@@ -97,14 +97,18 @@
 
     self.songList = [];
 
+    self.playNow = function() {
+      for (var i=0;i<self.songList.length;i++) {
+        if (!self.songList[i].played) {
+          self.songList[i].sound.play();
+          break;
+        }
+      }
+    };
+
     soundManager.defaultOptions = {
       onfinish: function() {
-        for (var i=0;i<self.songList.length;i++) {
-          if (!self.songList[i].played) {
-            self.songList[i].sound.play();
-            break;
-          }
-        }
+        self.playNow();
       }
     };
 
