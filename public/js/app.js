@@ -110,6 +110,7 @@
     var self = this;
 
     self.songList = [];
+    self.pushers = [];
 
     self.nowPlaying = {new:true};
 
@@ -172,6 +173,7 @@
 
       self.hostName = data.hostName;
       self.songList = data.tracklist;
+      self.pusherList = data.pushers;
 
       getTrackSounds();
 

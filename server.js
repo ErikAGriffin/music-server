@@ -13,6 +13,7 @@
   var fs = require('fs');
 
   // -- Socket.io --
+
   var io = require('socket.io')(server);
 
   io.on('connection', function(socket) {
@@ -23,10 +24,14 @@
       fs.readFile(filepath,'utf-8',function(err,data) {
         // Handle server shutdown here.
         if(err) {console.log('error reading file '+hostName+' while adding song');
-          data = "[]";}
-        var tracklist = JSON.parse(data);
-        tracklist.push(newSong.song);
-        fs.writeFile(filepath,JSON.stringify(tracklist), function(err) {
+          data = "{\"tracklist\":[],\"pushers\":[]}";}
+        var serverObject = JSON.parse(data);
+        serverObject.tracklist.push(newSong.song);
+        // Is this guaranteed to complete before fs.writeFile???
+        // Somehow I don't think so.
+        checkNewClient(serverObject.pushers,newSong.song.pusher);
+
+        fs.writeFile(filepath,JSON.stringify(serverObject), function(err) {
           if(err){console.log('error adding new track to file:\n'+err);}
         });
       });
@@ -89,21 +94,18 @@
 
   app.post('/gettracklist', function(req, res) {
     var sess = req.session;
-
-    var obj = {};
-    obj.hostName = sess.hostName;
-    fs.readFile('./files/'+sess.hostName+'.json','utf-8', function(err, data) {
+    var filepath = './files/'+sess.hostName+'.json';
+    fs.readFile(filepath,'utf-8', function(err, data) {
       if (err) {
         console.log('unable to read tracklist file '+sess.hostName);
         console.log(err);
-        data = "[]";
-        fs.writeFile('./files/'+sess.hostName+'.json',"[]",function(err) {
+        data = "{\"hostName\":\""+sess.hostName+"\",\"tracklist\":[],\"pushers\":[]}";
+        fs.writeFile(filepath,data,function(err) {
           if (err){console.log('error creating file:\n'+err);}
           console.log('created new file');
         });
       }
-      obj.tracklist = JSON.parse(data);
-      res.json(obj);
+      res.json(JSON.parse(data));
     });
   });
 
@@ -127,21 +129,33 @@
 
   var updateTracklist = function(filepath,data) {
     fs.writeFile(filepath,data, function(err) {
-      if(err){console.log('error updating tracklist\n'+err);}
+      if(err){console.log('[x] error updating tracklist\n'+err);}
     });
+  };
+
+  var checkNewClient = function(array, clientID, callback) {
+    if(!array.length) {array.push({id:clientID,played:false,out:false});}
+    else {
+      var result = array.filter(function(pusher) {
+        return pusher.id === clientID;
+      });
+      if (!result.length) {
+        array.push({id:clientID,played:false,out:false});
+      }
+    }
   };
 
   app.post('/updatetrack/:hostName/:trackID/:time', function(req,res) {
     var filepath = './files/'+req.params.hostName+'.json';
     fs.readFile(filepath,'utf-8',function(err,data) {
       if(err) {
-        console.log('[updatetrack] Error reading '+req.params.hostName);}
+        console.log('[updatetrack] Error reading '+req.params.hostName+"\n"+err);}
       else {
-        var tracklist = JSON.parse(data);
-        for (var i=0;i<tracklist.length;i++) {
-          if (tracklist[i].id == req.params.trackID) {
-            tracklist[i].position = req.params.time;
-            updateTracklist(filepath,JSON.stringify(tracklist));
+        var serverObject = JSON.parse(data);
+        for (var i=0;i<serverObject.tracklist.length;i++) {
+          if (serverObject.tracklist[i].id == req.params.trackID) {
+            serverObject.tracklist[i].position = req.params.time;
+            updateTracklist(filepath,JSON.stringify(serverObject));
             break;
           }
         }
