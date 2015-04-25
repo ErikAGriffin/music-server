@@ -110,7 +110,7 @@
     var self = this;
 
     self.songList = [];
-    self.pushers = [];
+    self.pusherList = [];
 
     self.nowPlaying = {new:true};
 
@@ -129,24 +129,46 @@
     };
 
     self.playNow = function() {
-      for (var i=0;i<self.songList.length;i++) {
-        var song = self.songList[i];
-        if (!song.played) {
-          song.sound.setPosition(song.position);
-          song.sound.play();
-          self.nowPlaying = song;
+
+      var readySongs = self.songList.filter(function(song) {
+        return !song.played;
+      });
+
+      console.log(self.pusherList);
+
+      for (var i=0;i<self.pusherList.length;i++) {
+        var pusher = self.pusherList[i];
+        if (!pusher.played) {
+          for (var j=0;j<readySongs.length;j++) {
+            var song = readySongs[j];
+            console.log(pusher.id+" :: "+song.pusher);
+            if (pusher.id === song.pusher) {
+              song.sound.setPosition(song.position);
+              song.sound.play();
+              self.nowPlaying = song;
+              break;
+            }
+          } // end for j
           break;
         }
-        if (i===self.songList.length-1) {self.nowPlaying = {new:true};}
       }
+
+//         if (i===self.songList.length-1) {self.nowPlaying = {new:true};}
     };
 
     // There is absolutely a better way of doing this.
     self.setPlayed = function(sound) {
       for(var i=0;i<self.songList.length;i++) {
-        if (self.songList[i].sound === sound) {
-          self.songList[i].played = true;
-          $http.post('/markplayed/'+self.hostName+'/'+self.songList[i].id);
+        var song = self.songList[i];
+        if (song.sound === sound) {
+          song.played = true;
+          for (var j=0;j<self.pusherList.length;j++) {
+            var pusher = self.pusherList[j];
+            if (pusher.id == song.pusher) {
+              pusher.played = true;
+            }
+          }
+          $http.post('/markplayed/'+self.hostName+'/'+song.id+'/'+song.pusher);
           break;
         }
       }
@@ -167,6 +189,13 @@
       }
     };
 
+    var validPushers = function(pushers) {
+      return pushers.filter(function(pusher) {
+
+      });
+
+    };
+
     $http.post('/gettracklist').success(function(data, status) {
 
       console.log('getting tracklist');
@@ -178,7 +207,9 @@
       getTrackSounds();
 
       // - Socket : add song -
-      socket.on('add song to '+self.hostName, function(newSong) {
+      socket.on('add song to '+self.hostName, function(newSongPusher) {
+        var newSong = newSongPusher[0];
+        self.pusherList = newSongPusher[1];
         getSound(newSong);
         self.songList.push(newSong);
         $scope.$apply();

@@ -14,6 +14,18 @@
 
   // -- Socket.io --
 
+  var checkClient = function(array, clientID, callback) {
+    if(!array.length) {array.push({id:clientID,played:false,out:false});}
+    else {
+      var result = array.filter(function(pusher) {
+        return pusher.id === clientID;
+      });
+      if (!result.length) {
+        array.push({id:clientID,played:false,out:false});
+      }
+    }
+  };
+
   var io = require('socket.io')(server);
 
   io.on('connection', function(socket) {
@@ -21,21 +33,24 @@
     socket.on('add song', function(newSong) {
       var hostName = newSong.hostName;
       var filepath = './files/'+hostName+'.json';
+      var serverObject = {};
       fs.readFile(filepath,'utf-8',function(err,data) {
-        // Handle server shutdown here.
+
+        // Handle server shutdown here vvv
         if(err) {console.log('error reading file '+hostName+' while adding song');
           data = "{\"tracklist\":[],\"pushers\":[]}";}
-        var serverObject = JSON.parse(data);
+
+        serverObject = JSON.parse(data);
         serverObject.tracklist.push(newSong.song);
         // Is this guaranteed to complete before fs.writeFile???
         // Somehow I don't think so.
-        checkNewClient(serverObject.pushers,newSong.song.pusher);
+        checkClient(serverObject.pushers,newSong.song.pusher);
 
         fs.writeFile(filepath,JSON.stringify(serverObject), function(err) {
           if(err){console.log('error adding new track to file:\n'+err);}
         });
+        io.emit('add song to '+hostName, [newSong.song, serverObject.pushers]);
       });
-      io.emit('add song to '+hostName, newSong.song);
     }); // end 'add song'
 
     socket.on('disconnect', function() {
@@ -109,20 +124,27 @@
     });
   });
 
-  app.post('/markplayed/:hostName/:trackID', function(req,res) {
+  app.post('/markplayed/:hostName/:trackID/:pusher', function(req,res) {
     console.log('Marking song '+req.params.trackID+' as played.');
     var filepath = './files/'+req.params.hostName+'.json';
     fs.readFile(filepath,'utf-8',function(err, data) {
       if(err){console.log('error marking song '+req.params.trackID);}
-      var tracklist = JSON.parse(data);
-      for (var i=0;i<tracklist.length;i++) {
-        if(tracklist[i].id === req.params.trackID) {
-          console.log('...and it worked');
-          tracklist[i].played = true;
+      var serverObject = JSON.parse(data);
+      for (var i=0;i<serverObject.tracklist.length;i++) {
+        var song = serverObject.tracklist[i];
+        if(song.id == req.params.trackID) {
+          song.played = true;
           break;
         }
       }
-      updateTracklist(filepath,JSON.stringify(tracklist));
+      for (var j=0;j<serverObject.pushers.length;j++) {
+        var pusher = serverObject.pushers[j];
+        if (pusher.id == req.params.pusher) {
+          pusher.played = true;
+          break;
+        }
+      }
+      updateTracklist(filepath,JSON.stringify(serverObject));
       res.json({});
     });
   });
@@ -133,17 +155,6 @@
     });
   };
 
-  var checkNewClient = function(array, clientID, callback) {
-    if(!array.length) {array.push({id:clientID,played:false,out:false});}
-    else {
-      var result = array.filter(function(pusher) {
-        return pusher.id === clientID;
-      });
-      if (!result.length) {
-        array.push({id:clientID,played:false,out:false});
-      }
-    }
-  };
 
   app.post('/updatetrack/:hostName/:trackID/:time', function(req,res) {
     var filepath = './files/'+req.params.hostName+'.json';
