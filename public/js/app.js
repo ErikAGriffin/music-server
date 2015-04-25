@@ -93,7 +93,7 @@
 
   // Begin ServerController
 
-  app.controller('ServerController', ['$scope','$http',function($scope,$http) {
+  app.controller('ServerController', ['$scope','$timeout','$http',function($scope,$timeout,$http) {
 
     var self = this;
 
@@ -180,23 +180,18 @@
       soundManager.pauseAll();
     };
 
-//     var postTrackProgress = function() {
+    var postTrackProgress = function() {
+      (function postProgress() {
+        $http.post('/updatetrack/'+self.hostname).success(function(data,status) {
+          console.log('Success! '+status);
+          $timeout(postProgress,5000);
+        }).error(function(data,status) {
+          console.log('Error updating track progress');
+        });
+      })();
+    };
 
-//     };
-
-//     var onlinePoll = function() {
-//       (function checkIn() {
-//         $http.post('/online/'+$window.currentUser).success(function(data,status) {
-//           self.usersOnline = data.users;
-//           $timeout(checkIn, 2997);
-//         }).error(function(data, status) {
-//           console.log('error in online poll: '+status);
-//         });
-//       })();
-//     };
-
-//     onlinePoll();
-
+    postTrackProgress();
 
 
 
