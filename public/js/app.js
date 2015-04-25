@@ -108,8 +108,11 @@
       }
     };
 
-    self.pauseAll = function() {
-      soundManager.pauseAll();
+    self.togglePlay = function() {
+      if (self.nowPlaying.new) {return;}
+      if (self.nowPlaying.sound.paused) {self.nowPlaying.sound.play();}
+      else {soundManager.pauseAll();}
+
     };
 
     self.playNow = function() {
@@ -173,8 +176,6 @@
     }).error(function(data,status) {
       console.log('error getting tracklist');
     });
-
-
 
 
     var postTrackProgress = function() {
