@@ -14,7 +14,7 @@
 
     // Host Connect
 
-    self.hostName = "";
+    self.hostName = "london";
     self.isConnected = false;
     self.searchPlaceholder = "Search Soundcloud...";
     self.hostPlaceholder = "#####";
@@ -47,6 +47,8 @@
         console.log('error checking hostname: '+status);
       });
     };
+
+    self.connect();
 
 
     // Search and Add Songs
