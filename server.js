@@ -125,6 +125,32 @@
       obj.tracklist = JSON.parse(data);
       res.json(obj);
     });
+  });
+
+  var updateTracklist = function(filepath,data) {
+    fs.writeFile(filepath,data, function(err) {
+      if(err){console.log('error updating track position\n'+err);}
+    });
+  };
+
+  app.post('/updatetrack/:hostName/:trackID/:time', function(req,res) {
+    var filepath = './files/'+req.params.hostName+'.json';
+    fs.readFile(filepath,'utf-8',function(err,data) {
+      if(err) {
+        console.log('[updatetrack] Error reading '+req.params.hostName);}
+      else {
+        var tracklist = JSON.parse(data);
+        for (var i=0;i<tracklist.length;i++) {
+          if (tracklist[i].id == req.params.trackID) {
+            tracklist[i].position = req.params.time;
+            updateTracklist(filepath,JSON.stringify(tracklist));
+            break;
+          }
+        }
+      }
+      res.json({});
+    });
+
 
   });
 

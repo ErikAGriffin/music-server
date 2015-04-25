@@ -83,7 +83,8 @@
         title: song.title,
         artist: song.user.username,
         artwork_url: song.artwork_url,
-        played: false
+        played: false,
+        position: 0
       };
       socket.emit('add song', {hostName: self.hostName,song: newSong});
       return false;
@@ -91,7 +92,7 @@
 
   }]); // end ClientController
 
-  // Begin ServerController
+  // --- Begin ServerController ---
 
   app.controller('ServerController', ['$scope','$timeout','$http',function($scope,$timeout,$http) {
 
@@ -106,11 +107,19 @@
 
     self.songList = [];
 
+    self.nowPlaying = {};
+
+    self.pauseAll = function() {
+      soundManager.pauseAll();
+    };
+
     self.playNow = function() {
-      console.log('playNow() called');
       for (var i=0;i<self.songList.length;i++) {
-        if (!self.songList[i].played) {
-          self.songList[i].sound.play();
+        var song = self.songList[i];
+        if (!song.played) {
+          song.sound.setPosition(song.position);
+          song.sound.play();
+          self.nowPlaying = song;
           break;
         }
       }
@@ -133,6 +142,14 @@
       });
     };
 
+    var getTrackSounds = function() {
+      for (var i=0;i<self.songList.length;i++) {
+        var song = self.songList[i];
+        if (!song.played) {
+          getSound(song);
+        }
+      }
+    };
 
     $http.post('/gettracklist').success(function(data, status) {
 
@@ -141,13 +158,7 @@
       self.hostName = data.hostName;
       self.songList = data.tracklist;
 
-      // Get streams of unplayed tracks
-      for (var i=0;i<self.songList.length;i++) {
-        var song = self.songList[i];
-        if (!song.played) {
-          getSound(song);
-        }
-      }
+      getTrackSounds();
 
       socket.on('add song to '+self.hostName, function(newSong) {
 
@@ -165,6 +176,7 @@
           $scope.$apply();
           if (self.songList.length === 1) {
             self.songList[0].sound.play();
+            self.nowPlaying = self.songList[0];
           }
         });
       });
@@ -176,14 +188,14 @@
     });
 
 
-    self.pauseAll = function() {
-      soundManager.pauseAll();
-    };
+
 
     var postTrackProgress = function() {
       (function postProgress() {
-        $http.post('/updatetrack/'+self.hostname).success(function(data,status) {
-          console.log('Success! '+status);
+        var time = 0;
+        if (self.nowPlaying.sound) {time = self.nowPlaying.sound.position;}
+        var url = '/updatetrack/'+self.hostName+'/'+self.nowPlaying.id+'/'+time;
+        $http.post(url).success(function(data,status) {
           $timeout(postProgress,5000);
         }).error(function(data,status) {
           console.log('Error updating track progress');
