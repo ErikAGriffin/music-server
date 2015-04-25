@@ -33,30 +33,10 @@
       io.emit('add song to '+hostName, newSong.song);
     }); // end 'add song'
 
-    socket.on('song played', function(songID) {
-      console.log('Marking song '+songID+' as played.');
-      fs.readFile('./files/london.json','utf-8',function(err,data) {
-        if(err) {console.log('error marking song '+songID);}
-        var tracklist = JSON.parse(data);
-        for (var i=0;i<tracklist.length;i++) {
-          if (tracklist[i].id === songID) {
-            tracklist[i].played = true;
-            break;
-          }
-        }
-        fs.writeFile('./files/london.json',JSON.stringify(tracklist), function(err) {
-          if(err){console.log('error writing track played '+songID);}
-        });
-      });
-
-    }); // end song played
-
-
     socket.on('disconnect', function() {
     });
 
   });
-
 
   // -- Express Session --
 
@@ -127,9 +107,27 @@
     });
   });
 
+  app.post('/markplayed/:hostName/:trackID', function(req,res) {
+    console.log('Marking song '+req.params.trackID+' as played.');
+    var filepath = './files/'+req.params.hostName+'.json';
+    fs.readFile(filepath,'utf-8',function(err, data) {
+      if(err){console.log('error marking song '+req.params.trackID);}
+      var tracklist = JSON.parse(data);
+      for (var i=0;i<tracklist.length;i++) {
+        if(tracklist[i].id === req.params.trackID) {
+          console.log('...and it worked');
+          tracklist[i].played = true;
+          break;
+        }
+      }
+      updateTracklist(filepath,JSON.stringify(tracklist));
+      res.json({});
+    });
+  });
+
   var updateTracklist = function(filepath,data) {
     fs.writeFile(filepath,data, function(err) {
-      if(err){console.log('error updating track position\n'+err);}
+      if(err){console.log('error updating tracklist\n'+err);}
     });
   };
 
@@ -150,8 +148,6 @@
       }
       res.json({});
     });
-
-
   });
 
   // --- Host Management ---

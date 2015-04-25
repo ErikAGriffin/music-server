@@ -44,7 +44,7 @@
           self.connectMessage = "There is no server by that name!";
         }
       }).error(function(data, status) {
-        console.log('error checking hostname: '+status);
+        console.log('error checking hostName: '+status);
       });
     };
 
@@ -133,7 +133,7 @@
       for(var i=0;i<self.songList.length;i++) {
         if (self.songList[i].sound === sound) {
           self.songList[i].played = true;
-          socket.emit('song played', self.songList[i].id);
+          $http.post('/markplayed/'+self.hostName+'/'+self.songList[i].id);
           break;
         }
       }
