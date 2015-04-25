@@ -19,6 +19,14 @@
     self.searchPlaceholder = "Search Soundcloud...";
     self.hostPlaceholder = "#####";
     self.searchText = "";
+    self.myName = "";
+
+
+    $http.post('/getclient').success(function(data,status) {
+      self.myName = data.userid;
+    }).error(function(data, status) {
+      console.log('error getting client id');
+    });
 
 
     self.togglePlaceholder = function() {
@@ -35,7 +43,6 @@
 
     self.connect = function() {
       $http.post('/checkhost/'+self.hostName).success(function(data, status) {
-        console.log(data);
         if (data) {
           console.log("Connected to "+self.hostName);
           self.connectMessage = "";
@@ -76,7 +83,8 @@
         artist: song.user.username,
         artwork_url: song.artwork_url,
         played: false,
-        position: 0
+        position: 0,
+        pusher: self.myName
       };
       socket.emit('add song', {hostName: self.hostName,song: newSong});
       // ..necessary?
@@ -146,7 +154,6 @@
     var getSound = function(song) {
       SC.stream('/tracks/'+song.id, function(sound) {
         song.sound = sound;
-        console.log(song);
       });
     };
 

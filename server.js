@@ -18,15 +18,15 @@
   io.on('connection', function(socket) {
 
     socket.on('add song', function(newSong) {
-      console.log(newSong);
       var hostName = newSong.hostName;
-      fs.readFile('./files/'+hostName+'.json','utf-8',function(err,data) {
+      var filepath = './files/'+hostName+'.json';
+      fs.readFile(filepath,'utf-8',function(err,data) {
         // Handle server shutdown here.
         if(err) {console.log('error reading file '+hostName+' while adding song');
           data = "[]";}
         var tracklist = JSON.parse(data);
         tracklist.push(newSong.song);
-        fs.writeFile('./files/'+hostName+'.json',JSON.stringify(tracklist), function(err) {
+        fs.writeFile(filepath,JSON.stringify(tracklist), function(err) {
           if(err){console.log('error adding new track to file:\n'+err);}
         });
       });
@@ -165,6 +165,13 @@
     });
 
 
+  });
+
+  // ..Temp user management..
+
+  app.post('/getclient', function(req,res) {
+    var sess = req.session;
+    res.json({userid:sess.id});
   });
 
 
