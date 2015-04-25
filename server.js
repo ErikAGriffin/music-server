@@ -199,6 +199,21 @@
     res.json({userid:sess.id});
   });
 
+  app.post('/resetValidPushers/:hostName', function(req, res) {
+    console.log('Resetting all valid pushers');
+    var filepath = './files/'+req.params.hostName+'.json';
+    fs.readFile(filepath,'utf-8',function(err,data) {
+      if(err){console.log('error resetting valid pushers');}
+      var serverObject = JSON.parse(data);
+      for (var i=0;i<serverObject.pushers.length;i++) {
+        var pusher = serverObject.pushers[i];
+        pusher.played = false;
+      }
+      updateTracklist(filepath,JSON.stringify(serverObject));
+      res.json({});
+    });
+  });
+
 
   // --- User Management ---
 

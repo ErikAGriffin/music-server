@@ -128,20 +128,25 @@
 
     };
 
+    var resetValidPushers = function() {
+      for (var i=0;i<self.pusherList.length;i++) {
+        self.pusherList[i].played = false;
+      }
+      $http.post('/resetValidPushers/'+self.hostName);
+      self.playNow();
+    };
+
     self.playNow = function() {
 
       var readySongs = self.songList.filter(function(song) {
         return !song.played;
       });
 
-      console.log(self.pusherList);
-
       for (var i=0;i<self.pusherList.length;i++) {
         var pusher = self.pusherList[i];
         if (!pusher.played) {
           for (var j=0;j<readySongs.length;j++) {
             var song = readySongs[j];
-            console.log(pusher.id+" :: "+song.pusher);
             if (pusher.id === song.pusher) {
               song.sound.setPosition(song.position);
               song.sound.play();
@@ -149,11 +154,18 @@
               break;
             }
           } // end for j
-          break;
-        }
+          if (!(self.nowPlaying.new || self.nowPlaying.played)) {
+            break;
+          }
+        } // end if !played
+      } // end for i
+      if (readySongs.length && self.nowPlaying.played) {
+        resetValidPushers();
       }
-
-//         if (i===self.songList.length-1) {self.nowPlaying = {new:true};}
+      else if (!readySongs.length && !self.nowPlaying.new) {
+        self.nowPlaying = {new:true};
+        resetValidPushers();
+      }
     };
 
     // There is absolutely a better way of doing this.
