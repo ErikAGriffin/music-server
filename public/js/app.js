@@ -108,8 +108,20 @@
       }
     };
 
+    // There is absolutely a better way of doing this.
+    self.setPlayed = function(sound) {
+      for(var i=0;i<self.songList.length;i++) {
+        if (self.songList[i].sound === sound) {
+          self.songList[i].played = true;
+          socket.emit('song played', self.songList[i].id);
+          break;
+        }
+      }
+    };
+
     soundManager.defaultOptions = {
       onfinish: function() {
+        self.setPlayed(this);
         self.playNow();
       }
     };
@@ -127,7 +139,6 @@
           $scope.$apply();
           if (self.songList.length === 1) {
             self.songList[0].sound.play();
-            self.songList[0].played = true;
           }
         });
       });
