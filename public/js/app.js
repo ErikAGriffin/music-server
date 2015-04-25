@@ -97,9 +97,17 @@
 
     var self = this;
 
+    soundManager.defaultOptions = {
+      onfinish: function() {
+        self.setPlayed(this);
+        self.playNow();
+      }
+    };
+
     self.songList = [];
 
     self.playNow = function() {
+      console.log('playNow() called');
       for (var i=0;i<self.songList.length;i++) {
         if (!self.songList[i].played) {
           self.songList[i].sound.play();
@@ -119,19 +127,37 @@
       }
     };
 
-    soundManager.defaultOptions = {
-      onfinish: function() {
-        self.setPlayed(this);
-        self.playNow();
-      }
+    var getSound = function(song) {
+      SC.stream('/tracks/'+song.id, function(sound) {
+        song.sound = sound;
+      });
     };
 
 
     $http.post('/gettracklist').success(function(data, status) {
+
+      console.log('getting tracklist');
+
       self.hostName = data.hostName;
       self.songList = data.tracklist;
 
+      // Get streams of unplayed tracks
+      for (var i=0;i<self.songList.length;i++) {
+        var song = self.songList[i];
+        if (!song.played) {
+          getSound(song);
+        }
+      }
+
       socket.on('add song to '+self.hostName, function(newSong) {
+
+//         newSong.sound = getSound(newSong);
+//         console.log('Check A');
+//         self.songList.push(newSong);
+//         console.log(newSong);
+//         console.log('Check B');
+//         $scope.$apply();
+
         SC.stream("/tracks/"+newSong.id, function(sound) {
           newSong.sound = sound;
           console.log(sound);
@@ -142,6 +168,9 @@
           }
         });
       });
+
+      self.playNow();
+
     }).error(function(data,status) {
       console.log('error getting tracklist');
     });
@@ -150,6 +179,23 @@
     self.pauseAll = function() {
       soundManager.pauseAll();
     };
+
+//     var postTrackProgress = function() {
+
+//     };
+
+//     var onlinePoll = function() {
+//       (function checkIn() {
+//         $http.post('/online/'+$window.currentUser).success(function(data,status) {
+//           self.usersOnline = data.users;
+//           $timeout(checkIn, 2997);
+//         }).error(function(data, status) {
+//           console.log('error in online poll: '+status);
+//         });
+//       })();
+//     };
+
+//     onlinePoll();
 
 
 
