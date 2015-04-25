@@ -55,21 +55,10 @@
 
     self.searchText = "";
 
-    var resolveImagesOf = function(tracks) {
-      // add additional logic for the default avatar
-      for (var i=0;i<tracks.length;i++) {
-        if (!tracks[i].artwork_url) {
-          tracks[i].artwork_url = tracks[i].user.avatar_url;
-        }
-      }
-      return tracks;
-    };
+
 
     self.musicSearch = function() {
-      console.log('Calling SC.get');
       SC.get('/tracks',{q: self.searchText}, function(tracks) {
-        console.log('SC.get returned');
-        console.log(tracks[0]);
         tracks = resolveImagesOf(tracks);
         self.searchResults = tracks;
         $scope.$apply();
@@ -77,7 +66,6 @@
     };
 
     self.addSong = function(song) {
-      console.log(song);
       var newSong = {
         id: song.id,
         title: song.title,
@@ -87,7 +75,18 @@
         position: 0
       };
       socket.emit('add song', {hostName: self.hostName,song: newSong});
+      // ..necessary?
       return false;
+    };
+
+    var resolveImagesOf = function(tracks) {
+      // add additional logic for the default avatar returning instead DropMusic image
+      for (var i=0;i<tracks.length;i++) {
+        if (!tracks[i].artwork_url) {
+          tracks[i].artwork_url = tracks[i].user.avatar_url;
+        }
+      }
+      return tracks;
     };
 
   }]); // end ClientController
@@ -98,16 +97,16 @@
 
     var self = this;
 
+    self.songList = [];
+
+    self.nowPlaying = {new:true};
+
     soundManager.defaultOptions = {
       onfinish: function() {
         self.setPlayed(this);
         self.playNow();
       }
     };
-
-    self.songList = [];
-
-    self.nowPlaying = {};
 
     self.pauseAll = function() {
       soundManager.pauseAll();
@@ -122,6 +121,7 @@
           self.nowPlaying = song;
           break;
         }
+        if (i===self.songList.length-1) {self.nowPlaying = {new:true};}
       }
     };
 
@@ -139,6 +139,7 @@
     var getSound = function(song) {
       SC.stream('/tracks/'+song.id, function(sound) {
         song.sound = sound;
+        console.log(song);
       });
     };
 
@@ -161,24 +162,10 @@
       getTrackSounds();
 
       socket.on('add song to '+self.hostName, function(newSong) {
-
-//         newSong.sound = getSound(newSong);
-//         console.log('Check A');
-//         self.songList.push(newSong);
-//         console.log(newSong);
-//         console.log('Check B');
-//         $scope.$apply();
-
-        SC.stream("/tracks/"+newSong.id, function(sound) {
-          newSong.sound = sound;
-          console.log(sound);
-          self.songList.push(newSong);
-          $scope.$apply();
-          if (self.songList.length === 1) {
-            self.songList[0].sound.play();
-            self.nowPlaying = self.songList[0];
-          }
-        });
+        getSound(newSong);
+        self.songList.push(newSong);
+        $scope.$apply();
+        if (self.nowPlaying.new) {self.playNow();}
       });
 
       self.playNow();
