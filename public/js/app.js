@@ -18,6 +18,8 @@
     self.isConnected = false;
     self.searchPlaceholder = "Search Soundcloud...";
     self.hostPlaceholder = "#####";
+    self.searchText = "";
+
 
     self.togglePlaceholder = function() {
       if (self.searchPlaceholder === "" || self.hostPlaceholder === "") {
@@ -50,15 +52,17 @@
 
     self.connect();
 
+    var getStreamable = function(tracks) {
+      return tracks.filter(function(song) {
+        return song.streamable === true;
+      });
+    };
 
     // Search and Add Songs
 
-    self.searchText = "";
-
-
-
     self.musicSearch = function() {
       SC.get('/tracks',{q: self.searchText}, function(tracks) {
+        tracks = getStreamable(tracks);
         tracks = resolveImagesOf(tracks);
         self.searchResults = tracks;
         $scope.$apply();
@@ -164,6 +168,7 @@
 
       getTrackSounds();
 
+      // - Socket : add song -
       socket.on('add song to '+self.hostName, function(newSong) {
         getSound(newSong);
         self.songList.push(newSong);
