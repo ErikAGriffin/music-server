@@ -98,7 +98,6 @@
 
   app.get('/server', function(req, res) {
     var sess = req.session;
-    sess.hostName = "london";
     if (!sess.hostName) {
       sess.hostName = genuuid.genServerID();
     }
