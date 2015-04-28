@@ -8,6 +8,11 @@
 
   app.use(express.static(root));
 
+  // -- Redis --
+
+  var Redis = require('ioredis');
+  var redis = new Redis();
+
   // -- FileSystem --
 
   var fs = require('fs');
