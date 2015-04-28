@@ -1,7 +1,7 @@
 
 var fs = require('fs');
 
-var socket = function(io) {
+var socket = function(io, redis) {
 
   var checkClient = function(array, clientID, callback) {
     if(!array.length) {array.push({id:clientID,played:false,out:false});}
@@ -17,26 +17,51 @@ var socket = function(io) {
 
   io.on('connection', function(socket) {
 
-    socket.on('add song', function(newSong) {
-      var hostName = newSong.hostName;
+    // --------
+    // May be able to re-use getHostObject.js here somehow
+
+
+    socket.on('add song', function(message) {
+      var hostName = message.hostName;
+      var song = message.song;
       var filepath = './files/'+hostName+'.json';
-      var serverObject = {};
+      var hostObject = {
+        hostName:hostName,
+        pushers: [],
+        tracklist: []
+      };
+
+      // Push <song> to tracklist
+      // Add pusherID to <hostName>:pushers
+      // and full object to <hostName>:pusher:<pusherID>
+
+      console.log(song.pusher);
+
+      redis.sadd(hostName+":pushers",song.pusher);
+
+      redis.smembers(hostName+":pushers", function(err, data) {
+
+        console.log('some shit went down');
+        console.log(data);
+
+      });
+
+
       fs.readFile(filepath,'utf-8',function(err,data) {
 
         // Handle server shutdown here vvv
-        if(err) {console.log('error reading file '+hostName+' while adding song');
-          data = "{\"tracklist\":[],\"pushers\":[]}";}
+        if(err) {data = "{\"tracklist\":[],\"pushers\":[]}";}
 
-        serverObject = JSON.parse(data);
-        serverObject.tracklist.push(newSong.song);
+        hostObject = JSON.parse(data);
+        hostObject.tracklist.push(song);
         // Is this guaranteed to complete before fs.writeFile???
         // Somehow I don't think so.
-        checkClient(serverObject.pushers,newSong.song.pusher);
+        checkClient(hostObject.pushers,song.pusher);
 
-        fs.writeFile(filepath,JSON.stringify(serverObject), function(err) {
+        fs.writeFile(filepath,JSON.stringify(hostObject), function(err) {
           if(err){console.log('error adding new track to file:\n'+err);}
         });
-        io.emit('add song to '+hostName, [newSong.song, serverObject.pushers]);
+        io.emit('add song to '+hostName, [song, hostObject.pushers]);
       });
     }); // end 'add song'
 

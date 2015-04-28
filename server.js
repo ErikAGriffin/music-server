@@ -23,7 +23,7 @@
   var fs = require('fs');
 
   var io = require('socket.io')(server);
-  var socket = require('./src/socket')(io);
+  var socket = require('./src/socket')(io, redis);
 
   // -- Express Session --
 
