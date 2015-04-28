@@ -8,6 +8,10 @@
 
   app.use(express.static(root));
 
+  // -- Sample require section --
+
+  var getHostObject = require('./src/host');
+
   // -- Redis --
 
   var Redis = require('ioredis');
@@ -66,7 +70,7 @@
   // -- Express Session --
 
   var session = require('express-session');
-  var genuuid = require('./controllers/uuid');
+  var genuuid = require('./src/uuid');
 
   app.use(session({
     genid: function(req) {return genuuid();},
@@ -85,7 +89,7 @@
   app.use(bodyParser.urlencoded({'extended':'true'}));
 
   // -- BCrypt --
-  var bcrypt = require('./controllers/bcrypt');
+  var bcrypt = require('./src/bcrypt');
 
 
   // --- Server Start ---
@@ -113,10 +117,12 @@
 
   app.post('/gettracklist', function(req, res) {
     var sess = req.session;
+    // ____Testing REDIS_____
+    getHostObject(redis,sess.hostName);
+    // ______________________
     var filepath = './files/'+sess.hostName+'.json';
     fs.readFile(filepath,'utf-8', function(err, data) {
       if (err) {
-        console.log('unable to read tracklist file '+sess.hostName);
         console.log(err);
         data = "{\"hostName\":\""+sess.hostName+"\",\"tracklist\":[],\"pushers\":[]}";
         fs.writeFile(filepath,data,function(err) {
@@ -182,9 +188,7 @@
   // --- Host Management ---
 
   app.post('/checkhost/:hostName', function(req,res) {
-
     var exists = false;
-
     fs.readFile('./files/'+req.params.hostName+'.json','utf-8', function(err, data) {
       if (err) {
         console.log('server does not exist yet.');
@@ -192,8 +196,6 @@
       else {exists = true;}
       res.json(exists);
     });
-
-
   });
 
   // ..Temp user management..
