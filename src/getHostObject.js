@@ -1,9 +1,8 @@
 // (function() {
 
+  var async = require('async');
 
   var getHostObject = function(redis, hostName, callback) {
-
-    var async = require('async');
 
     var hostObject = {
       hostName: hostName,
@@ -39,14 +38,17 @@
       });
     };
 
-
-
     async.parallel([
-      function() {
-        getSongs();
+      function(callback) {
+        redis.smembers(hostName+":pushers", function(err,data) {
+          if (err) {console.log('Erroar.');}
+          for (var i=0;i<data.length;i++) {
+            console.log('I dont get it');
+          }
+        });
       },
-      function() {
-        getPushers();
+      function(callback) {
+        getSongs();
       }
     ],callback(hostObject));
 
