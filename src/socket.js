@@ -3,17 +3,17 @@ var fs = require('fs');
 
 var socket = function(io, redis) {
 
-  var checkClient = function(array, clientID, callback) {
-    if(!array.length) {array.push({id:clientID,played:false,out:false});}
-    else {
-      var result = array.filter(function(pusher) {
-        return pusher.id === clientID;
-      });
-      if (!result.length) {
-        array.push({id:clientID,played:false,out:false});
-      }
-    }
-  };
+//   var checkClient = function(array, clientID, callback) {
+//     if(!array.length) {array.push({id:clientID,played:false,out:false});}
+//     else {
+//       var result = array.filter(function(pusher) {
+//         return pusher.id === clientID;
+//       });
+//       if (!result.length) {
+//         array.push({id:clientID,played:false,out:false});
+//       }
+//     }
+//   };
 
   io.on('connection', function(socket) {
 
@@ -31,19 +31,21 @@ var socket = function(io, redis) {
         tracklist: []
       };
 
-      // Push <song> to tracklist
-      // Add pusherID to <hostName>:pushers
-      // and full object to <hostName>:pusher:<pusherID>
+      // Store song and add to tracklist.
+      // Perhaps also use ismember here if duplicates create a problem.
 
-      console.log(song.pusher);
+      redis.sadd(hostName+":songs",song.id);
+      redis.hmset(hostName+":song:"+song.id, song);
+      hostObject.tracklist.push(song);
 
-      redis.sadd(hostName+":pushers",song.pusher);
-
-      redis.smembers(hostName+":pushers", function(err, data) {
-
-        console.log('some shit went down');
-        console.log(data);
-
+      redis.sismember(hostName+":pushers",song.pusher, function(err, result) {
+        if(!result) {
+          console.log('pusher added!');
+          var pusher = {id:song.pusher,played:false,penalty:0};
+          redis.sadd(hostName+":pushers",song.pusher);
+          redis.hmset(hostName+":pusher:"+song.pusher,pusher);
+          hostObject.pushers.push(pusher);
+        }
       });
 
 
@@ -53,10 +55,9 @@ var socket = function(io, redis) {
         if(err) {data = "{\"tracklist\":[],\"pushers\":[]}";}
 
         hostObject = JSON.parse(data);
-        hostObject.tracklist.push(song);
         // Is this guaranteed to complete before fs.writeFile???
         // Somehow I don't think so.
-        checkClient(hostObject.pushers,song.pusher);
+//         checkClient(hostObject.pushers,song.pusher);
 
         fs.writeFile(filepath,JSON.stringify(hostObject), function(err) {
           if(err){console.log('error adding new track to file:\n'+err);}
