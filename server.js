@@ -77,6 +77,7 @@
     var sess = req.session;
 
     getHostObject(redis,sess.hostName,function(data) {
+      console.log('hmm.');
       console.log('calledback data: '+JSON.stringify(data));
     });
 
