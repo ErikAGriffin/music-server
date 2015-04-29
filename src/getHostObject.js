@@ -8,23 +8,34 @@
       tracklist: []
     };
 
-    redis.smembers(hostName+":pushers", function(err,data) {
-      console.log('hello.');
-      console.log(data);
-      for (var i=0;i<data.length;i++) {
-        console.log(data[i]);
-//         console.log(redis.hgetall(data[i]));
-//         hostObject.pushers.push(redis.hgetall(data[i]));
-      }
-      console.log(hostObject.pushers.length);
-      console.log(hostObject.pushers.length);
-      console.log(hostObject.pushers.length);
+    // -- Build hostObject --
 
-      callback(hostObject);
+    var getSongObject = function(err,song) {
+      console.log('song got!');
+      hostObject.tracklist.push(song);
+    };
+
+    var getPusherObject = function(err,pusher) {
+      console.log('pusher got!');
+      hostObject.pushers.push(pusher);
+    };
+
+    redis.lrange(hostName+":songs",0,-1, function(err,data) {
+      if (err) {console.log('Error reading songs! '+hostName+'\n'+err);}
+      for(var i=0;i<data.length;i++) {
+        redis.hgetall(hostName+":song:"+data[i], getSongObject);
+      }
     });
 
 
+    redis.smembers(hostName+":pushers", function(err, data) {
+      if (err) {console.log('Error reading pushers! '+hostName+'\n'+err);}
+      for(var i=0;i<data.length;i++) {
+        redis.hgetall(hostName+":pusher:"+data[i], getPusherObject);
+      }
+    });
 
+    callback(hostObject);
   };
 
 
