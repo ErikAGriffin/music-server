@@ -10,60 +10,53 @@
       tracklist: []
     };
 
-    var getSongObject = function(err,song) {
-      console.log('song got!');
-      hostObject.tracklist.push(song);
+    var getSongObject = function(songID) {
+      return function(callback) {
+        redis.hgetall(hostName+":song:"+songID, callback);
+      };
     };
 
     var getSongs = function(cb) {
       redis.lrange(hostName+":songs",0,-1, function(err,data) {
+        var asyncArray = [];
         if (err) {console.log('Error reading songs! '+hostName+'\n'+err);}
-        cb(null,data);
+        for(var i=0;i<data.length;i++) {
+          asyncArray.push(getSongObject(data[i]));
+        }
+        async.parallel(asyncArray, function(err, result) {
+          cb(null, result);
+        });
       });
     };
 
-    var getPusherObject = function(err,pusher) {
-      console.log('pusher got!');
-      hostObject.pushers.push(pusher);
+    var getPusherObject = function(pusherID) {
+      return function(callback) {
+        redis.hgetall(hostName+":pusher:"+pusherID,callback);
+      };
     };
 
     var getPushers = function(cb) {
       redis.smembers(hostName+":pushers", function(err, data) {
+        var asyncArray = [];
         if (err) {console.log('Error reading pushers! '+hostName+'\n'+err);}
-        cb(null, data);
+        for(var i=0;i<data.length;i++) {
+          asyncArray.push(getPusherObject(data[i]));
+        }
+        async.parallel(asyncArray, function(err, result) {
+          cb(null, result);
+        });
       });
     };
 
-    async.waterfall([
-
-      function(cb) {
-        redis.smembers(hostName+":pushers", function(err, data) {
-          if (err) {console.log('Error reading pushers! '+hostName+'\n'+err);}
-          cb(null,data);
-        });
-      },
-      function(pushers, cb) {
-        var temp = [];
-        for(var i=0;i<pushers.length;i++) {
-          temp.push((function(pusher){
-            return function(callback){
-              redis.hgetall(hostName+":pusher:"+pusher, callback);
-            };
-          })(pushers[i]));
-        }
-        async.parallel(temp, function(err, res) {
-          console.log('where am I?');
-          console.log(res);
-        });
-      }
-    ],function(err, result){
-      console.log('Maybe?');
-      console.log(result);
+    async.parallel([
+      getPushers,
+      getSongs
+    ],function(err, results){
+      hostObject.pushers = results[0];
+      hostObject.tracklist = results[1];
+      callback(hostObject);
     });
-
-
   };
-
 
   module.exports = getHostObject;
 
