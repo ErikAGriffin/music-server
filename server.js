@@ -74,7 +74,7 @@
   // --- Track Management ---
 
   app.post('/gettracklist', function(req, res) {
-    getHostObject(redis,sess.hostName,function(data) {
+    getHostObject(redis,req.session.hostName,function(data) {
       res.json(data);
     });
   });
