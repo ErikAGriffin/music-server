@@ -62,7 +62,6 @@
   // ++++ Routes ++++
 
   app.get('/', function(req, res) {
-    var sess = req.session;
     res.render('home');
   });
 
@@ -86,31 +85,18 @@
 
   app.post('/markplayed/:hostName/:songID/:pusherID', function(req,res) {
     var params = req.params;
-    var update = {
-      hostName: params.hostName,
-      songID: params.songID,
-      pusherID: params.pusherID};
-
-    console.log('Marking song '+update.songID+' as played.');
-    markSongPlayed(redis,update);
-
+    console.log('Marking song '+params.songID+' as played.');
+    markSongPlayed(redis,{hostName: params.hostName,songID: params.songID,pusherID: params.pusherID});
     res.json({});
     // have to change headers on post request
     // in order to use res.end();
-
   });
 
   // possibly change to put?
 
   app.post('/updatetrack/:hostName/:songID/:time', function(req,res) {
     var params = req.params;
-    var update  = {
-      hostName: params.hostName,
-      songID: params.songID,
-      time: params.time};
-
-    updateSongPosition(redis,update);
-
+    updateSongPosition(redis,{hostName: params.hostName,songID: params.songID,time: params.time});
     res.json({});
 
   });
