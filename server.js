@@ -113,6 +113,8 @@
   };
 
 
+  // possibly change to put?
+
   app.post('/updatetrack/:hostName/:trackID/:time', function(req,res) {
     var filepath = './files/'+req.params.hostName+'.json';
     fs.readFile(filepath,'utf-8',function(err,data) {
