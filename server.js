@@ -74,24 +74,8 @@
   // --- Track Management ---
 
   app.post('/gettracklist', function(req, res) {
-    var sess = req.session;
-
     getHostObject(redis,sess.hostName,function(data) {
-      console.log('hmm.');
-      console.log('calledback data: '+JSON.stringify(data));
-    });
-
-
-    var filepath = './files/'+sess.hostName+'.json';
-    fs.readFile(filepath,'utf-8', function(err, data) {
-      if (err) {
-        console.log(err);
-        data = "{\"hostName\":\""+sess.hostName+"\",\"tracklist\":[],\"pushers\":[]}";
-        fs.writeFile(filepath,data,function(err) {
-          console.log('created new file');
-        });
-      }
-      res.json(JSON.parse(data));
+      res.json(data);
     });
   });
 
