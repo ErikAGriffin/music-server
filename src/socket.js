@@ -22,14 +22,16 @@ var socket = function(io, redis) {
 
         redis.sismember(hostName+":pushers",song.pusher, function(err, result) {
           if(!result) {
-            console.log('pusher added!');
             var pusher = {id:song.pusher,played:false,penalty:0};
             redis.sadd(hostName+":pushers",song.pusher);
             redis.hmset(hostName+":pusher:"+song.pusher,pusher);
             hostObject.pushers.push(pusher);
           }
 
-          console.log('emitting host object');
+          // Not sure if I like emitting from within this
+          // ismember function.. Avoids using async lib
+          // but seems dirty.
+
           io.emit('add song to '+hostName, [song, hostObject.pushers]);
         });
       });
