@@ -13,6 +13,7 @@
   var getHostObject = require('./src/getHostObject');
   var checkHostExists = require('./src/checkHostExists');
   var updateSongPosition = require('./src/updateSongPosition');
+  var markSongPlayed = require('./src/markSongPlayed');
 
   // -- Redis --
 
@@ -82,37 +83,21 @@
     });
   });
 
-  app.post('/markplayed/:hostName/:trackID/:pusher', function(req,res) {
-    console.log('Marking song '+req.params.trackID+' as played.');
-    var filepath = './files/'+req.params.hostName+'.json';
-    fs.readFile(filepath,'utf-8',function(err, data) {
-      if(err){console.log('error marking song '+req.params.trackID);}
-      var serverObject = JSON.parse(data);
-      for (var i=0;i<serverObject.tracklist.length;i++) {
-        var song = serverObject.tracklist[i];
-        if(song.id == req.params.trackID) {
-          song.played = true;
-          break;
-        }
-      }
-      for (var j=0;j<serverObject.pushers.length;j++) {
-        var pusher = serverObject.pushers[j];
-        if (pusher.id == req.params.pusher) {
-          pusher.played = true;
-          break;
-        }
-      }
-      updateTracklist(filepath,JSON.stringify(serverObject));
-      res.json({});
-    });
+  app.post('/markplayed/:hostName/:songID/:pusherID', function(req,res) {
+    var params = req.params;
+    var update = {
+      hostName: params.hostName,
+      songID: params.songID,
+      pusherID: params.pusherID};
+
+    console.log('Marking song '+update.songID+' as played.');
+
+    markSongPlayed(redis,update);
+    // have to change headers on post request
+    // in order to use res.end();
+    res.json({});
+
   });
-
-  var updateTracklist = function(filepath,data) {
-    fs.writeFile(filepath,data, function(err) {
-      if(err){console.log('[x] error updating tracklist\n'+err);}
-    });
-  };
-
 
   // possibly change to put?
 
@@ -125,22 +110,8 @@
 
     updateSongPosition(redis,update);
 
-    var filepath = './files/'+req.params.hostName+'.json';
-    fs.readFile(filepath,'utf-8',function(err,data) {
-      if(err) {
-        console.log('[updatetrack] Error reading '+req.params.hostName+"\n"+err);}
-      else {
-        var serverObject = JSON.parse(data);
-        for (var i=0;i<serverObject.tracklist.length;i++) {
-          if (serverObject.tracklist[i].id == req.params.trackID) {
-            serverObject.tracklist[i].position = req.params.time;
-            updateTracklist(filepath,JSON.stringify(serverObject));
-            break;
-          }
-        }
-      }
-      res.json({});
-    });
+    res.json({});
+
   });
 
   // --- Host Management ---

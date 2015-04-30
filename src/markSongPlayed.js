@@ -1,23 +1,13 @@
 (function() {
 
+  var markSongPlayed = function(redis, update) {
 
-  var async = require('async');
+    var hostName = update.hostName;
+    var songID = update.songID;
+    var pusherID = update.pusherID;
 
-  var markSongPlayed = function(redis, update, callback) {
-
-    // update is object of form
-    // {hostname: , songID: , pusherID: }
-
-    // Get tracklist of hostName
-
-    // Find track matching ID. (&& pusher?)
-
-    // Mark track as played
-
-    // Mark pusher as played?
-
-    // Update these in redis.
-
+    redis.hset(hostName+":song:"+songID,'played',true);
+    redis.hset(hostName+":pusher:"+pusherID,'played',true);
 
   };
 
