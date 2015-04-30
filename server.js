@@ -12,6 +12,7 @@
 
   var getHostObject = require('./src/getHostObject');
   var checkHostExists = require('./src/checkHostExists');
+  var updateSongPosition = require('./src/updateSongPosition');
 
   // -- Redis --
 
@@ -115,7 +116,15 @@
 
   // possibly change to put?
 
-  app.post('/updatetrack/:hostName/:trackID/:time', function(req,res) {
+  app.post('/updatetrack/:hostName/:songID/:time', function(req,res) {
+    var params = req.params;
+    var update  = {
+      hostName: params.hostName,
+      songID: params.songID,
+      time: params.time};
+
+    updateSongPosition(redis,update);
+
     var filepath = './files/'+req.params.hostName+'.json';
     fs.readFile(filepath,'utf-8',function(err,data) {
       if(err) {

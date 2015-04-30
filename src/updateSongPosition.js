@@ -1,22 +1,15 @@
 (function() {
 
-  var async = require('async');
+  var updateSongPosition = function(redis, update) {
 
-  var updateSongPosition = function(redis, update, callback) {
+    var hostName = update.hostName;
+    var songID = update.songID;
+    var time = update.time;
 
-    // update is object of the form
-    // {hostName: , trackID: , time: }
-
-    // Find track in question.
-
-    // Update its position property in the database
-    // using given time
-
-    // Write to redis
+    redis.hset(hostName+":song:"+songID,'position',time);
 
   };
 
   module.exports = updateSongPosition;
-
 
 }());
