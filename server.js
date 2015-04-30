@@ -133,13 +133,14 @@
   // --- Host Management ---
 
   app.post('/checkhost/:hostName', function(req,res) {
+    // How to check using the new structure?
     var exists = false;
     fs.readFile('./files/'+req.params.hostName+'.json','utf-8', function(err, data) {
       if (err) {
         console.log('server does not exist yet.');
       }
       else {exists = true;}
-      res.json(exists);
+      res.json(true);
     });
   });
 
