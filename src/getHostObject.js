@@ -11,6 +11,9 @@
     };
 
     var getSongObject = function(songID) {
+      redis.hget(hostName+':song:'+songID, 'played', function(err,data) {
+        console.log('this song\'s played value is: '+data);
+      });
       return function(callback) {
         redis.hgetall(hostName+":song:"+songID, callback);
       };
@@ -24,6 +27,10 @@
           asyncArray.push(getSongObject(data[i]));
         }
         async.parallel(asyncArray, function(err, result) {
+
+          console.log('song async result..');
+          console.log(result);
+
           cb(null, result);
         });
       });
@@ -54,6 +61,10 @@
     ],function(err, results){
       hostObject.pushers = results[0];
       hostObject.tracklist = results[1];
+
+      console.log('hostObject.tracklist:');
+      console.log(hostObject.tracklist);
+
       callback(hostObject);
     });
   };

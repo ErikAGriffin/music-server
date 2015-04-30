@@ -44,7 +44,6 @@
     self.connect = function() {
       $http.post('/checkhost/'+self.hostName).success(function(data, status) {
         if (data) {
-          console.log("Connected to "+self.hostName);
           self.connectMessage = "";
           self.isConnected = true;
         }
@@ -136,12 +135,22 @@
 
     self.playNow = function() {
 
+      console.log('play now called');
+
+      console.log('self.songList:');
+      console.log(self.songList);
+
       var readySongs = self.songList.filter(function(song) {
         return !song.played;
       });
 
+      console.log('readySongs');
+      console.log(readySongs);
+
       for (var i=0;i<self.pusherList.length;i++) {
         var pusher = self.pusherList[i];
+        console.log('Checkpoint A!');
+        console.log(pusher);
         if (!pusher.played) {
           for (var j=0;j<readySongs.length;j++) {
             var song = readySongs[j];
@@ -209,6 +218,8 @@
     $http.post('/gettracklist').success(function(data, status) {
 
       console.log('getting tracklist');
+
+      console.log(data);
 
       self.hostName = data.hostName;
       self.songList = data.tracklist;
