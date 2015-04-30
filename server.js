@@ -66,6 +66,8 @@
   app.get('/server', function(req, res) {
     var sess = req.session;
     if (!sess.hostName) {
+      // create something that allows client to check
+      // that host exists.
       sess.hostName = genuuid.genServerID();
     }
     res.render('host', {hostName: sess.hostName});
