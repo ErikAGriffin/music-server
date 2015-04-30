@@ -14,6 +14,7 @@
   var checkHostExists = require('./src/checkHostExists');
   var updateSongPosition = require('./src/updateSongPosition');
   var markSongPlayed = require('./src/markSongPlayed');
+  var resetValidPushers = require('./src/resetValidPushers');
 
   // -- Redis --
 
@@ -91,11 +92,11 @@
       pusherID: params.pusherID};
 
     console.log('Marking song '+update.songID+' as played.');
-
     markSongPlayed(redis,update);
+
+    res.json({});
     // have to change headers on post request
     // in order to use res.end();
-    res.json({});
 
   });
 
@@ -136,6 +137,9 @@
   });
 
   app.post('/resetValidPushers/:hostName', function(req, res) {
+
+
+
     console.log('Resetting all valid pushers');
     var filepath = './files/'+req.params.hostName+'.json';
     fs.readFile(filepath,'utf-8',function(err,data) {
