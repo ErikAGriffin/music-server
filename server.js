@@ -21,9 +21,7 @@
   var Redis = require('ioredis');
   var redis = new Redis();
 
-  // -- FileSystem --
-
-  var fs = require('fs');
+  // -- Socket.io --
 
   var io = require('socket.io')(server);
   var socket = require('./src/socket')(io, redis);
