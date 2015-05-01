@@ -17,28 +17,22 @@ var socket = function(io, redis) {
         hostObject = returnedObject;
 
         redis.rpush(hostName+":songs",song.id);
-        redis.hmset(hostName+":song:"+song.id, song);
+        redis.set(hostName+":song:"+song.id, JSON.stringify(song));
         hostObject.tracklist.push(song);
 
         redis.sismember(hostName+":pushers",song.pusher, function(err, result) {
           if(!result) {
             var pusher = {id:song.pusher,played:false,penalty:0};
             redis.sadd(hostName+":pushers",song.pusher);
-            redis.hmset(hostName+":pusher:"+song.pusher,pusher);
+            redis.set(hostName+":pusher:"+song.pusher,JSON.stringify(pusher));
             hostObject.pushers.push(pusher);
           }
-
-          // Not sure if I like emitting from within this
-          // ismember function.. Avoids using async lib
-          // but seems dirty.
 
           io.emit('add song to '+hostName, [song, hostObject.pushers]);
         });
       });
 
-      // Also.. later functionality I am not pushing every song..
-      // rather getting the next legal user's top song.
-    }); // end 'add song'
+    });
 
     socket.on('disconnect', function() {
     });

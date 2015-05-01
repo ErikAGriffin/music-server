@@ -2,12 +2,17 @@
 
   var updateSongPosition = function(redis, update) {
 
-    var hostName = update.hostName;
-    var songID = update.songID;
-    var time = update.time;
+    if (update.songID === 'undefined') {return;}
 
-    redis.hset(hostName+":song:"+songID,'position',time);
+    var songKey = update.hostName+":song:"+update.songID;
 
+    var updatePosition = function(err, songString) {
+      var song = JSON.parse(songString);
+      song.position = update.time;
+      redis.set(songKey, JSON.stringify(song));
+    };
+
+    redis.get(songKey, updatePosition);
   };
 
   module.exports = updateSongPosition;
