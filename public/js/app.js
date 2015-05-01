@@ -44,7 +44,6 @@
     self.connect = function() {
       $http.post('/checkhost/'+self.hostName).success(function(data, status) {
         if (data) {
-          console.log("Connected to "+self.hostName);
           self.connectMessage = "";
           self.isConnected = true;
         }
@@ -135,7 +134,6 @@
     };
 
     self.playNow = function() {
-
       var readySongs = self.songList.filter(function(song) {
         return !song.played;
       });
