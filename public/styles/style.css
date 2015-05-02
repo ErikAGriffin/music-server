@@ -1,3 +1,37 @@
+html, body {
+  height: 100%;
+}
+
+main {
+  min-height:100%;
+  margin-bottom: -40px;
+}
+
+header {
+  background:black;
+  background:rgba(0,0,0,0.7);
+}
+
+main:after {
+  content:" ";
+  display:block;
+}
+
+footer, main:after {
+  height:30px;
+  padding-top:10px;
+}
+
+footer {
+  background:black;
+  background:rgba(0,0,0,0.7);
+  width:100%;
+}
+
+footer a {
+  margin: 0px 12px;
+}
+
 body {
   text-align:center;
   background:url('/images/headphone_print.jpg');
@@ -13,13 +47,12 @@ h1 {
   margin: 0px;
   margin-bottom: 15px;
   padding: 12px 20px;
-  background: rgb(0,0,0);
-  background: rgba(0,0,0,0.7);
 }
 
 .minititle {
   font-size:2em;
 }
+
 
 p {
   font-size: 1.5em;
@@ -83,6 +116,8 @@ input:not([type=submit]):not([type=image]) {
 
 }
 
+/* Results Page */
+
 #searchresults {
   position:relative;
 }
@@ -120,19 +155,6 @@ input:not([type=submit]):not([type=image]) {
 
 #searchresults .songartist {
   color:#6B6B6B;
-}
-
-
-footer {
-  position:fixed;
-  bottom:0px;
-  left:0px;
-  width:100%;
-  margin: 12px 0px;
-}
-
-footer a {
-  margin: 0px 12px;
 }
 
 

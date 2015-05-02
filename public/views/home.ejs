@@ -2,62 +2,62 @@
 
   <body ng-controller="ClientController as clientCtrl">
 
-    <header>
-      <h1 ng-class="{minititle:clientCtrl.isConnected}">
-        Music Server
-      </h1>
-    </header>
+    <main>
+      <header>
+        <h1 ng-class="{minititle:clientCtrl.isConnected}">
+          Music Server
+        </h1>
+      </header>
+
+      <section id="startbox" ng-hide="clientCtrl.isConnected">
+
+        <p>
+          Connect to a Server
+        </p>
+
+        <form name="hostConnect" ng-submit="hostConnect.$valid && clientCtrl.connect()" autocomplete="off" novalidate>
+          <span class="serverMessage">{{clientCtrl.connectMessage}}&nbsp;</span>
+
+          <input type="text" ng-model="clientCtrl.hostName" placeholder="{{clientCtrl.hostPlaceholder}}" autocomplete="off" ng-focus="clientCtrl.togglePlaceholder()" ng-blur="clientCtrl.togglePlaceholder()" required />
+
+          <input class="connect" type="image" value="Submit" src="/images/connect.png" />
+
+        </form>
+
+        <p>...or <a href="/server">host</a> your own.</p>
+      </section>
 
 
-    <section id="startbox" ng-hide="clientCtrl.isConnected">
 
-      <p>
-        Connect to a Server
-      </p>
 
-      <form name="hostConnect" ng-submit="hostConnect.$valid && clientCtrl.connect()" autocomplete="off" novalidate>
-        <span class="serverMessage">{{clientCtrl.connectMessage}}&nbsp;</span>
 
-        <input type="text" ng-model="clientCtrl.hostName" placeholder="{{clientCtrl.hostPlaceholder}}" autocomplete="off" ng-focus="clientCtrl.togglePlaceholder()" ng-blur="clientCtrl.togglePlaceholder()" required />
 
-        <input class="connect" type="image" value="Submit" src="/images/connect.png" />
+      <form ng-show="clientCtrl.isConnected" name="songSearchForm" ng-submit="songSearchForm.$valid && clientCtrl.musicSearch()" autocomplete="off" novalidate>
+
+        <input id="soundsearch" type="text" ng-model="clientCtrl.searchText" placeholder="{{clientCtrl.searchPlaceholder}}" ng-focus="clientCtrl.togglePlaceholder()" ng-blur="clientCtrl.togglePlaceholder()" required />
+
+        <input class="soundsearch" type="image" value="Submit" src="/images/search.png" />
+
 
       </form>
 
-      <p>...or <a href="/server">host</a> your own.</p>
-    </section>
+      <ul id="searchresults">
+        <li ng-repeat="song in clientCtrl.searchResults">
+          <img ng-src={{song.artwork_url}} />
+          <p class="songtitle">{{song.title}}</p>
+          <p class="songartist">{{song.user.username}}</p>
+
+          <a ng-click="clientCtrl.addSong(song)"><img src="/images/upload.png" /></a>
 
 
+        </li>
+      </ul>
 
-
-
-
-    <form ng-show="clientCtrl.isConnected" name="songSearchForm" ng-submit="songSearchForm.$valid && clientCtrl.musicSearch()" autocomplete="off" novalidate>
-
-      <input id="soundsearch" type="text" ng-model="clientCtrl.searchText" placeholder="{{clientCtrl.searchPlaceholder}}" ng-focus="clientCtrl.togglePlaceholder()" ng-blur="clientCtrl.togglePlaceholder()" required />
-
-      <input class="soundsearch" type="image" value="Submit" src="/images/search.png" />
-
-
-    </form>
-
-    <ul id="searchresults">
-      <li ng-repeat="song in clientCtrl.searchResults">
-        <img ng-src={{song.artwork_url}} />
-        <p class="songtitle">{{song.title}}</p>
-        <p class="songartist">{{song.user.username}}</p>
-
-        <a ng-click="clientCtrl.addSong(song)"><img src="/images/upload.png" /></a>
-
-
-      </li>
-    </ul>
+    </main>
 
     <footer>
-      <nav>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-      </nav>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
     </footer>
 
 
