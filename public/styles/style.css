@@ -1,12 +1,20 @@
 body {
   text-align:center;
+  background:url('/images/headphone_print.jpg');
+  background-size: auto 800px;
+  background-position:top center;
+  color:#cd9e71;
+  font-family: 'Montserrat', sans-serif;
 }
 
 h1 {
   font-family: 'Montserrat', sans-serif;
-  font-size:4em;
-  margin: 15px 12px;
-  margin-top: 30px;
+  font-size:3.4em;
+  margin: 0px;
+  margin-bottom: 15px;
+  padding: 12px 20px;
+  background: rgb(0,0,0);
+  background: rgba(0,0,0,0.7);
 }
 
 .minititle {
@@ -14,13 +22,13 @@ h1 {
 }
 
 p {
-  font-family: 'EB Garamond', serif;
   font-size: 1.5em;
-  margin: 12px 20px;
+  margin: 0px 20px;
+  padding: 12px 0px;
 }
 
 a {
-  color:black;
+  color:#D5C5B6;
 }
 
 
@@ -32,6 +40,15 @@ form {
   width: 100%;
 }
 
+#startbox {
+  background:black;
+  background: rgba(0,0,0,0.7);
+  border-radius:50px;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  margin: 20px 12px;
+}
+
 .serverMessage {
   text-align:center;
   margin: 0 auto;
@@ -39,6 +56,8 @@ form {
 }
 
 input:not([type=submit]):not([type=image]) {
+  background:black;
+  background:rgba(0,0,0,0);
   text-align:center;
   font-size:4em;
   width: 80%;
@@ -46,7 +65,7 @@ input:not([type=submit]):not([type=image]) {
   display:block;
   border: 0px;
   border-bottom: 4px solid black;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 #soundsearch {

@@ -237,7 +237,7 @@
         if (self.nowPlaying.sound) {time = self.nowPlaying.sound.position;}
         var url = '/updatetrack/'+self.hostName+'/'+self.nowPlaying.id+'/'+time;
         $http.post(url).success(function(data,status) {
-          $timeout(postProgress,5000);
+          $timeout(postProgress,1000);
         }).error(function(data,status) {
           console.log('Error updating track progress');
         });
