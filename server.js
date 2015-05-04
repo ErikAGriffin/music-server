@@ -19,7 +19,12 @@
   // -- Redis --
 
   var Redis = require('ioredis');
-  var redis = new Redis();
+  var redis;
+  if (process.env.REDISCLOUD_URL) {
+    console.log('Hey! '+process.env.REDISCLOUD_URL);
+    redis = new Redis(process.env.REDISCLOUD_URL);
+  }
+  else {redis = new Redis();}
 
   // -- Socket.io --
 
