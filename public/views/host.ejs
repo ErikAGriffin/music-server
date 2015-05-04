@@ -13,9 +13,11 @@
         <a ng-click="serverCtrl.togglePlay()">Pause</a>
       </header>
 
-      <ul>
-        <li ng-repeat="song in serverCtrl.songList track by $index">
-          <img ng-src="{{song.artwork_url}}" />{{song.artist}} - {{song.title}}
+      <ul id="searchresults">
+        <li ng-repeat="song in serverCtrl.songList track by $index" ng-class="{played: song.played}">
+          <img ng-src="{{song.artwork_url}}" />
+          <p class="songtitle">{{song.title}}</p>
+          <p class="songartist">{{song.artist}}</p>
         </li>
       </ul>
 

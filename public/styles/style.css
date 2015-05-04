@@ -129,9 +129,15 @@ input:not([type=submit]):not([type=image]) {
 
 /* Results Page */
 
+ul {
+  list-style:none;
+  padding:0px;
+}
+
 #searchresults {
   position:relative;
   line-height: 0.9;
+  margin: 8px 0px;
 }
 
 #searchresults li {
@@ -178,13 +184,9 @@ input:not([type=submit]):not([type=image]) {
   font-size: 3em;
 }
 
-ul {
-  list-style:none;
-  padding:0px;
-}
 
-li {
-  padding: 12px 0px;
+.played {
+  filter:blur(1.5px);
 }
 
 
