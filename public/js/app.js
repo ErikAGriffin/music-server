@@ -14,7 +14,7 @@
 
     // Host Connect
 
-    self.hostName = "Oslo";
+    self.hostName = "";
     self.isConnected = false;
     self.searchPlaceholder = "Search Music...";
     self.hostPlaceholder = "#####";
@@ -56,8 +56,6 @@
         console.log('error checking hostName: '+status);
       });
     };
-
-    self.connect();
 
     var getStreamable = function(tracks) {
       return tracks.filter(function(song) {
