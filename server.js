@@ -58,6 +58,8 @@
 
   app.get('/server', function(req, res) {
     var sess = req.session;
+      redis.set('OSLO',true);
+      sess.hostName = 'OSLO';
     if (!sess.hostName) {
       var hostName = genuuid.genServerID();
       redis.set(hostName,true);

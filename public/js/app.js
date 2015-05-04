@@ -14,7 +14,7 @@
 
     // Host Connect
 
-    self.hostName = "";
+    self.hostName = "Oslo";
     self.isConnected = false;
     self.searchPlaceholder = "Search Soundcloud...";
     self.hostPlaceholder = "#####";
@@ -56,6 +56,8 @@
         console.log('error checking hostName: '+status);
       });
     };
+
+    self.connect();
 
     var getStreamable = function(tracks) {
       return tracks.filter(function(song) {
