@@ -48,8 +48,10 @@ h1 {
   font-family: 'Montserrat', sans-serif;
   font-size:3.4em;
   margin: 0px;
-  margin-bottom: 15px;
   padding: 12px 20px;
+}
+h2 {
+  margin: 0px;
 }
 
 .minititle {
@@ -104,12 +106,18 @@ input:not([type=submit]):not([type=image]) {
   margin-bottom: 18px;
 }
 
+#searchbox {
+  background:black;
+  background:rgba(0,0,0,0.7);
+  padding-top:10px;
+}
+
 #soundsearch {
   font-size:1.5em;
 }
 
 .connect {
-  width:40%;
+  width:50%;
 }
 
 .soundsearch {
@@ -123,6 +131,7 @@ input:not([type=submit]):not([type=image]) {
 
 #searchresults {
   position:relative;
+  overflow:hidden;
 }
 
 #searchresults li {
@@ -131,6 +140,7 @@ input:not([type=submit]):not([type=image]) {
   padding: 0px;
   text-align:left;
   position:relative;
+  color:black;
 }
 
 #searchresults li > img {

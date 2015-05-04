@@ -4,23 +4,27 @@
 
   <body ng-controller="ServerController as serverCtrl">
 
-    <header>
-      <h1 class="minititle">
-        Music Server
-      </h1>
-      <h2 id="hostname"><%= hostName %></h2>
-      <a ng-click="serverCtrl.togglePlay()">Pause</a>
-    </header>
-
     <main>
-      <ul>
+      <header>
+        <h1 class="minititle">
+          Music Server
+        </h1>
+        <h2 id="hostname"><%= hostName %></h2>
+        <a ng-click="serverCtrl.togglePlay()">Pause</a>
+      </header>
 
+      <ul>
         <li ng-repeat="song in serverCtrl.songList track by $index">
           <img ng-src="{{song.artwork_url}}" />{{song.artist}} - {{song.title}}
         </li>
-
       </ul>
+
     </main>
+    <footer>
+      <a href="http://soundcloud.com/"><img src="/images/powered_by_sc_thin.png" /></a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </footer>
 
 
 
