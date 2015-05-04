@@ -39,6 +39,7 @@ body {
   background:url('/images/headphone_print.jpg');
   background-size: auto 800px;
   background-position:top center;
+  background-attachment:fixed;
   color:#cd9e71;
   font-family: 'Montserrat', sans-serif;
 }
