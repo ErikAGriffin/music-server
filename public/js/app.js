@@ -42,6 +42,7 @@
     };
 
     self.connect = function() {
+      self.hostName = self.hostName.toUpperCase();
       $http.post('/checkhost/'+self.hostName).success(function(data, status) {
         if (data) {
           self.connectMessage = "";

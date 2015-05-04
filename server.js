@@ -8,23 +8,6 @@
 
   app.use(express.static(root));
 
-  // -- Sample require section --
-
-  var getHostObject = require('./src/getHostObject');
-  var checkHostExists = require('./src/checkHostExists');
-  var updateSongPosition = require('./src/updateSongPosition');
-  var markSongPlayed = require('./src/markSongPlayed');
-  var resetValidPushers = require('./src/resetValidPushers');
-
-  // -- Redis --
-
-  var redis = require('./src/redis');
-
-  // -- Socket.io --
-
-  var io = require('socket.io')(server);
-  var socket = require('./src/socket')(io, redis);
-
   // -- Express Session --
 
   var session = require('express-session');
@@ -38,6 +21,20 @@
   // -- EJS Templates --
   app.set('view engine','ejs');
   app.set('views', root+'views/');
+
+  // -- Sample require section --
+
+  var getHostObject = require('./src/getHostObject');
+  var checkHostExists = require('./src/checkHostExists');
+  var updateSongPosition = require('./src/updateSongPosition');
+  var markSongPlayed = require('./src/markSongPlayed');
+  var resetValidPushers = require('./src/resetValidPushers');
+
+  var redis = require('./src/redis');
+
+  var io = require('socket.io')(server);
+  var socket = require('./src/socket')(io, redis);
+
 
   // -- Database --
 
@@ -55,9 +52,6 @@
     console.log("Listening on server port " + port);
   });
 
-
-  // ++++ Routes ++++
-
   app.get('/', function(req, res) {
     res.render('home');
   });
@@ -72,8 +66,6 @@
     res.render('host', {hostName: sess.hostName});
   });
 
-  // --- Track Management ---
-
   app.post('/gettracklist', function(req, res) {
     getHostObject(redis,req.session.hostName,function(data) {
       res.json(data);
@@ -82,11 +74,8 @@
 
   app.post('/markplayed/:hostName/:songID/:pusherID', function(req,res) {
     var params = req.params;
-    console.log('Marking song '+params.songID+' as played.');
     markSongPlayed(redis,{hostName: params.hostName,songID: params.songID,pusherID: params.pusherID});
     res.json({});
-    // have to change headers on post request
-    // in order to use res.end();
   });
 
   // possibly change to put?
@@ -95,7 +84,6 @@
     var params = req.params;
     updateSongPosition(redis,{hostName: params.hostName,songID: params.songID,time: params.time});
     res.json({});
-
   });
 
   // --- Host Management ---
