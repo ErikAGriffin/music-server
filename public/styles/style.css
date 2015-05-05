@@ -39,6 +39,7 @@ body {
   background:url('/images/headphone_print.jpg');
   background-size: auto 800px;
   background-position:top center;
+  background-attachment:fixed;
   color:#cd9e71;
   font-family: 'Montserrat', sans-serif;
 }
@@ -47,8 +48,10 @@ h1 {
   font-family: 'Montserrat', sans-serif;
   font-size:3.4em;
   margin: 0px;
-  margin-bottom: 15px;
   padding: 12px 20px;
+}
+h2 {
+  margin: 0px;
 }
 
 .minititle {
@@ -103,12 +106,18 @@ input:not([type=submit]):not([type=image]) {
   margin-bottom: 18px;
 }
 
-#soundsearch {
+#searchbox {
+  background:black;
+  background:rgba(0,0,0,0.7);
+  padding-top:10px;
+}
+
+#searchbox input[type=text] {
   font-size:1.5em;
 }
 
 .connect {
-  width:40%;
+  width:50%;
 }
 
 .soundsearch {
@@ -120,8 +129,15 @@ input:not([type=submit]):not([type=image]) {
 
 /* Results Page */
 
+ul {
+  list-style:none;
+  padding:0px;
+}
+
 #searchresults {
   position:relative;
+  line-height: 0.9;
+  margin: 8px 0px;
 }
 
 #searchresults li {
@@ -130,6 +146,8 @@ input:not([type=submit]):not([type=image]) {
   padding: 0px;
   text-align:left;
   position:relative;
+  color:black;
+  overflow:hidden;
 }
 
 #searchresults li > img {
@@ -166,15 +184,49 @@ input:not([type=submit]):not([type=image]) {
   font-size: 3em;
 }
 
-ul {
-  list-style:none;
-  padding:0px;
+
+.played {
+  filter:blur(1.5px);
 }
 
-li {
-  padding: 12px 0px;
+
+@media(min-width:406px) {
+
+  #startbox {
+    margin: 60px 30px 20px 30px;
+  }
+
+  #searchresults {
+    width:406px;
+    margin-left:auto;
+    margin-right:auto;
+
+  }
+
+
+  body {
+  }
 }
 
+@media(min-width:500px) {
+
+  #startbox {
+    width:441px;
+    margin: 60px auto 20px auto;
+  }
+
+  .soundsearch {
+    width:60px;
+  }
+
+  #searchbox input[type=text] {
+    width:405px;
+  }
+
+  body {
+  }
+
+}
 
 
 

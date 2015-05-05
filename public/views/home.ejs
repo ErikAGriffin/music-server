@@ -8,6 +8,14 @@
           Music Server
         </h1>
       </header>
+        <form ng-show="clientCtrl.isConnected" name="songSearchForm" ng-submit="songSearchForm.$valid && clientCtrl.musicSearch()" autocomplete="off" novalidate>
+          <section id="searchbox">
+
+            <input type="text" ng-model="clientCtrl.searchText" placeholder="{{clientCtrl.searchPlaceholder}}" ng-focus="clientCtrl.togglePlaceholder()" ng-blur="clientCtrl.togglePlaceholder()" required />
+
+            <input class="soundsearch" type="image" value="Submit" src="/images/search.png" />
+          </section>
+        </form>
 
       <section id="startbox" ng-hide="clientCtrl.isConnected">
 
@@ -30,24 +38,13 @@
 
 
 
-
-
-      <form ng-show="clientCtrl.isConnected" name="songSearchForm" ng-submit="songSearchForm.$valid && clientCtrl.musicSearch()" autocomplete="off" novalidate>
-
-        <input id="soundsearch" type="text" ng-model="clientCtrl.searchText" placeholder="{{clientCtrl.searchPlaceholder}}" ng-focus="clientCtrl.togglePlaceholder()" ng-blur="clientCtrl.togglePlaceholder()" required />
-
-        <input class="soundsearch" type="image" value="Submit" src="/images/search.png" />
-
-
-      </form>
-
       <ul id="searchresults">
         <li ng-repeat="song in clientCtrl.searchResults">
           <img ng-src={{song.artwork_url}} />
           <p class="songtitle">{{song.title}}</p>
           <p class="songartist">{{song.user.username}}</p>
 
-          <a ng-click="clientCtrl.addSong(song)"><img src="/images/upload.png" /></a>
+          <a ng-click="clientCtrl.addSong(song)"><img src="/images/send.png" /></a>
 
 
         </li>

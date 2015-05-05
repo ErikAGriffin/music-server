@@ -16,7 +16,7 @@
 
     self.hostName = "";
     self.isConnected = false;
-    self.searchPlaceholder = "Search Soundcloud...";
+    self.searchPlaceholder = "Search Music...";
     self.hostPlaceholder = "#####";
     self.searchText = "";
     self.myName = "";
@@ -31,7 +31,7 @@
 
     self.togglePlaceholder = function() {
       if (self.searchPlaceholder === "" || self.hostPlaceholder === "") {
-        self.searchPlaceholder = "Search Soundcloud...";
+        self.searchPlaceholder = "Search Music...";
         self.hostPlaceholder = "#####";
       }
       else {
