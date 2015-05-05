@@ -11,7 +11,7 @@
         <form ng-show="clientCtrl.isConnected" name="songSearchForm" ng-submit="songSearchForm.$valid && clientCtrl.musicSearch()" autocomplete="off" novalidate>
           <section id="searchbox">
 
-            <input id="soundsearch" type="text" ng-model="clientCtrl.searchText" placeholder="{{clientCtrl.searchPlaceholder}}" ng-focus="clientCtrl.togglePlaceholder()" ng-blur="clientCtrl.togglePlaceholder()" required />
+            <input type="text" ng-model="clientCtrl.searchText" placeholder="{{clientCtrl.searchPlaceholder}}" ng-focus="clientCtrl.togglePlaceholder()" ng-blur="clientCtrl.togglePlaceholder()" required />
 
             <input class="soundsearch" type="image" value="Submit" src="/images/search.png" />
           </section>
