@@ -22,6 +22,8 @@
     self.myName = "";
 
 
+
+
     $http.post('/getclient').success(function(data,status) {
       self.myName = data.userid;
     }).error(function(data, status) {
@@ -63,7 +65,7 @@
       });
     };
 
-    // Search and Add Songs
+    // Search
 
     self.musicSearch = function() {
       SC.get('/tracks',{q: self.searchText}, function(tracks) {
@@ -74,7 +76,11 @@
       });
     };
 
+    // Add Song
+
     self.addSong = function(song) {
+      song.sendThumbnail = "/images/sent.png";
+      song.sent = true;
       var newSong = {
         id: song.id,
         title: song.title,
@@ -92,6 +98,8 @@
     var resolveImagesOf = function(tracks) {
       // add additional logic for the default avatar returning instead DropMusic image
       for (var i=0;i<tracks.length;i++) {
+        tracks[i].sendThumbnail = "/images/send.png";
+        tracks[i].sent = false;
         if (!tracks[i].artwork_url) {
           tracks[i].artwork_url = tracks[i].user.avatar_url;
         }
