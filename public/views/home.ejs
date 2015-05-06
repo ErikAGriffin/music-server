@@ -44,8 +44,9 @@
           <p class="songtitle">{{song.title}}</p>
           <p class="songartist">{{song.user.username}}</p>
 
-          <a ng-click="clientCtrl.addSong(song)"><img src="/images/send.png" /></a>
 
+
+          <a ng-click="!song.sent && clientCtrl.addSong(song)"><img ng-src={{song.sendThumbnail}} /></a>
 
         </li>
       </ul>
