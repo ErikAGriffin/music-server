@@ -261,7 +261,17 @@
 
 
 
+  app.controller('AboutController', function() {
 
+    var self = this;
+
+    self.showIphoneInfo = false;
+
+    self.toggleIphoneInfo = function() {
+      self.showIphoneInfo = !self.showIphoneInfo;
+    };
+
+  });
 
 
 

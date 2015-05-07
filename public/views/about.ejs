@@ -1,0 +1,44 @@
+<% include partials/head %>
+
+  <body ng-controller="AboutController as aboutCtrl">
+    <main>
+      <header>
+        <a href="/"><h1>Music Drop</h1></a>
+      </header>
+
+      <section class="content">
+
+        <h2>How Does It Work?</h2>
+
+        <ul>
+          <h3>1.</h3>
+          <li>
+            Plug in a computer or Android device to your speakers.
+            <a ng-click="aboutCtrl.toggleIphoneInfo()">(Why not iPhones?)</a>
+          </li>
+          <li class="modal" ng-show="aboutCtrl.showIphoneInfo">
+            In order to save mobile data for its customers, Apple has opted to not allow pre-loading of HTML5 audio.
+            Without a native app (coming soon..?),  you have to manually click play for each song, which defeats the purpose.
+            <br />
+            <a ng-click="aboutCtrl.toggleIphoneInfo()">close</a>
+          </li>
+          <h3>2.</h3>
+          <li>
+            Visit <a href="/server" target="_blank">musicdrop.me/server</a> to prepare the server.
+          </li>
+          <h3>3.</h3>
+          <li>
+            Connect your mobile device to the server using the code shown.
+          </li>
+          <h3>4.</h3>
+          <li>
+            Add songs and enjoy!
+          </li>
+        </ul>
+
+
+      </section>
+
+    </main>
+
+<% include partials/footer %>

@@ -12,6 +12,11 @@ header {
   background:rgba(0,0,0,0.7);
 }
 
+header a {
+  text-decoration:none;
+  color:#cd9e71;
+}
+
 main:after {
   content:" ";
   display:block;
@@ -132,6 +137,7 @@ input:not([type=submit]):not([type=image]) {
 ul {
   list-style:none;
   padding:0px;
+  margin:0px;
 }
 
 #searchresults {
@@ -177,6 +183,31 @@ ul {
   color:#6B6B6B;
 }
 
+/* About Page */
+
+.content {
+  margin: 30px 0px;
+  background:black;
+  background:rgba(0,0,0,0.7);
+}
+
+.content h2 {
+  padding: 12px 0px;
+}
+
+.content h3 {
+  margin: 0;
+  padding: 7px 0px;
+}
+
+.content li {
+  padding: 8px 16px;
+}
+
+.modal {
+  background:black;
+  background:rgba(0,0,0,0.7);
+}
 
 /* Host Page */
 
@@ -203,6 +234,12 @@ ul {
 
   }
 
+  .modal {
+    width:370px;
+    margin-left:auto;
+    margin-right:auto;
+    padding: 12px;
+  }
 
   body {
   }

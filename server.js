@@ -66,6 +66,10 @@
     res.render('host', {hostName: sess.hostName});
   });
 
+  app.get('/about', function(req,res) {
+    res.render('about');
+  });
+
   app.post('/gettracklist', function(req, res) {
     getHostObject(redis,req.session.hostName,function(data) {
       res.json(data);
